@@ -1,0 +1,106 @@
+﻿@model Banking.Models.BankAccountAdminViewModel
+@{
+    ViewBag.Title = "Szczegóły konta bankowego";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Breadcrumb{
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-university"></i> @ViewBag.Title</h1>
+            <p>Zarządzanie kontami bankowymi</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"> <a href="@Url.Action("Index", "PanelAdmin")"><i class="fa fa-home fa-lg"></i></a></li>
+            <li class="breadcrumb-item">@ViewBag.Title</li>
+        </ul>
+    </div>
+}
+
+<div class="col-md-6">
+    <div class="tile">
+        <div class="tile-title-w-btn">
+            <h3 class="title">@ViewBag.Title</h3>
+            <div class="btn-group text-right">
+                <a class="btn btn-primary" href="@Url.Action("Edit", "BankAccountsAdmin", new { id = Model.AccountNumber })"><i class="fa fa-lg fa-edit"></i></a>
+                <a class="btn btn-primary buttonDelete" href="#"><i class="fa fa-trash fa-lg"></i></a>
+
+                @using (Html.BeginForm("Delete", "BankAccountsAdmin", new { id = Model.AccountNumber }, FormMethod.Post, htmlAttributes: new { id = "deleteForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="submit" hidden />
+                }
+            </div>
+        </div>
+        <div class="tile-body">
+            <b> @Html.DisplayNameFor(model => model.User.Id) </b><br>
+            @Html.DisplayFor(model => model.User.Id)
+        </div>
+        <div class="tile-body">
+            <b> @Html.DisplayNameFor(model => model.User.UserName) </b><br>
+            @Html.DisplayFor(model => model.User.UserName)
+        </div>
+        <div class="tile-body">
+            <b> @Html.DisplayNameFor(model => model.AccountNumber) </b><br>
+            @Html.DisplayFor(model => model.AccountNumber)
+        </div>
+        <div class="tile-body">
+            <b> @Html.DisplayNameFor(model => model.OpeningDate) </b><br>
+            @Html.DisplayFor(model => model.OpeningDate)
+        </div>
+        <div class="tile-body">
+            <b> @Html.DisplayNameFor(model => model.Frozen) </b><br>
+            @if (Model.Frozen == true)
+            {
+                <span class="badge badge-danger">Włączone</span>
+            }
+            else if (Model.Frozen == false)
+            {
+                <span class="badge badge-success">Wyłączone</span>
+            }
+        </div>
+        <div class="tile-body">
+            <b> @Html.DisplayNameFor(model => model.AvailableFunds) </b><br>
+            @Html.DisplayFor(model => model.AvailableFunds)
+        </div>
+        <div class="tile-body">
+            <b> @Html.DisplayNameFor(model => model.Balance) </b><br>
+            @Html.DisplayFor(model => model.Balance)
+        </div>
+        <div class="tile-body">
+            <b> @Html.DisplayNameFor(model => model.DebitLimit) </b><br>
+            @Html.DisplayFor(model => model.DebitLimit)
+        </div>
+        <div class="tile-body">
+            <b> @Html.DisplayNameFor(model => model.Locks) </b><br>
+            @Html.DisplayFor(model => model.Locks)
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/SweetAlert")
+    <script type="text/javascript">
+        $('.buttonDelete').click(function () {
+            swal({
+                title: "Jesteś pewny?",
+                text: "Nie będziesz w stanie cofnąć tej operacji!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Tak, usuń!",
+                cancelButtonText: "Nie, cofnij!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    swal("Usunięte!", "Element został usunięty", "success");
+                    $('.confirm').on('click', () => {
+                        $('#deleteForm').submit();
+                    })
+                } else {
+                    swal("Anulowano", "Dane nie zostały usunięte", "error");
+                }
+            });
+        });
+    </script>
+}

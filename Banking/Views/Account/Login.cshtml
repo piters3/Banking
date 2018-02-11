@@ -1,0 +1,52 @@
+﻿@using Banking.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Logowanie";
+}
+
+
+<div class="col-md-6">
+    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count > 0)
+        {
+            <div class="alert alert-dismissible alert-danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        }
+        <div class="form-group">
+            @Html.LabelFor(m => m.UserName)
+            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Password)
+
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            <div class="checkbox">
+                @Html.CheckBoxFor(m => m.RememberMe)
+                @Html.LabelFor(m => m.RememberMe)
+            </div>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">Zaloguj</button>
+        </div>
+        <p>
+            @Html.ActionLink("Zarejestruj się", "Register")
+        </p>
+        <p>
+            @Html.ActionLink("Zapomniałeś hasła?", "ForgotPassword")
+        </p>
+    }
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/Validate")
+}

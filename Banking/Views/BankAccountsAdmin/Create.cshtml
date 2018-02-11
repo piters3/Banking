@@ -1,0 +1,84 @@
+﻿@model Banking.Models.BankAccountAdminViewModel
+
+@{
+    ViewBag.Title = "Dodawanie konta bankowego";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Breadcrumb{
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-university"></i> @ViewBag.Title</h1>
+            <p>Zarządzanie kontami bankowymi</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"> <a href="@Url.Action("Index", "PanelAdmin")"><i class="fa fa-home fa-lg"></i></a></li>
+            <li class="breadcrumb-item">@ViewBag.Title</li>
+        </ul>
+    </div>
+}
+
+<div class="col-md-6">
+    <div class="tile">
+        @using (Html.BeginForm("Create", "BankAccountsAdmin", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                @if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count > 0)
+                {
+                    <div class="alert alert-dismissible alert-danger">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    </div>
+                }
+                <div class="form-group">
+                    @Html.LabelFor(model => model.User)
+                    @Html.DropDownListFor(model => model.UserId, ViewBag.UsersList as SelectList, "Wybierz", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.OpeningDate)
+                    @Html.TextBoxFor(model => model.OpeningDate, new { @class = "form-control", id = "openingDate", placeholder = "Wybierz datę" })
+                    @Html.ValidationMessageFor(model => model.OpeningDate, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Balance)
+                    @Html.TextBoxFor(model => model.Balance, new { @class = "form-control", type = "number", min = "0", step = "100", @Value = "0" })
+                    @Html.ValidationMessageFor(model => model.Balance, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DebitLimit)
+                    @Html.TextBoxFor(model => model.DebitLimit, new { @class = "form-control", type = "number", min = "0", step = "100", @Value = "0" })
+                    @Html.ValidationMessageFor(model => model.DebitLimit, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Locks)
+                    @Html.TextBoxFor(model => model.Locks, new { @class = "form-control", type = "number", min = "0", step = "100", @Value = "0" })
+                    @Html.ValidationMessageFor(model => model.Locks, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Frozen)
+                    @Html.CheckBoxFor(m => m.Frozen, new { @class = "checkbox-inline", id = "status" })
+                    @*@Html.Label("status", "Konto włączone", new { @class = "control-label" })*@
+                </div>
+                <div class="tile-footer">
+                    <button class="btn btn-primary" type="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i>Zapisz</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/Validate")
+    @Scripts.Render("~/DatePicker")
+
+    <script type="text/javascript">
+        $('#openingDate').datepicker({
+            format: "dd.mm.yyyy",
+            autoclose: true,
+            todayHighlight: true,
+            language: 'pl'
+        });
+    </script>
+}

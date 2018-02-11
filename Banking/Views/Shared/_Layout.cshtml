@@ -1,0 +1,69 @@
+﻿@using Banking.Helpers;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Banking">
+    <meta name="author" content="Pioter">
+    <title>@ViewBag.Title | Banking</title>
+    @Styles.Render("~/UserCSS")
+</head>
+<body>
+    <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="@Url.Action("Index","Home")">GymLog</a>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item @Html.IsActive("Index", "Home")">@Html.ActionLink("Strona główna", "Index", "Home", null, new { @class = "nav-link" })</li>
+                @if (Request.IsAuthenticated && User.IsInRole("admin"))
+                {
+                    <li class="nav-item @Html.IsActive("Index", "PanelAdmin")">@Html.ActionLink("Panel administratora", "Index", "PanelAdmin", null, new { @class = "nav-link" })</li>
+                }
+            </ul>
+            @Html.Partial("_LoginPartial")
+        </div>
+    </nav>
+    <div class="container">
+        <div class="col">
+            <div class="row">
+                @if (TempData["message"] != null)
+                {
+                    <div class="alert alert-dismissible alert-success">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong>Świetnie!</strong> @TempData["message"]
+                    </div>
+                }
+                @if (TempData["error"] != null)
+                {
+                    <div class="alert alert-dismissible alert-danger">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong>Niestety!</strong> @TempData["error"]
+                    </div>
+                }
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    <div class="text-left">
+                        <p>&copy; @DateTime.Now.Year Piotr Strzelecki</p>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    <div class="text-right">
+                        Banking
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    @Scripts.Render("~/UserJS")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

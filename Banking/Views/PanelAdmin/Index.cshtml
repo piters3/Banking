@@ -1,0 +1,19 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Dashboard";
+}
+
+
+@section Breadcrumb{
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-dashboard"></i> @ViewBag.Title</h1>
+            <p>Stąd zaczniesz administrowanie</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"> <a href="@Url.Action("Index", "PanelAdmin")"><i class="fa fa-home fa-lg"></i></a></li>
+        </ul>
+    </div>
+}
+
+BODY

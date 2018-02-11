@@ -1,0 +1,151 @@
+﻿@model IEnumerable<Banking.Entities.User>
+@{
+    ViewBag.Title = "Użytkownicy";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@Styles.Render("~/DatatablesCSS")
+
+@section Breadcrumb{
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-users"></i> @ViewBag.Title</h1>
+            <p>Zarządzanie użytkownikami</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"> <a href="@Url.Action("Index", "PanelAdmin")"><i class="fa fa-home fa-lg"></i></a></li>
+            <li class="breadcrumb-item">@ViewBag.Title</li>
+        </ul>
+    </div>
+}
+<div class="col-md-12">
+    <div class="tile">
+        <a href="@Url.Action("Create", "UsersAdmin")"><i class="fa fa-plus fa-lg"></i> Nowy użytkownik</a>
+        <table class="table table-hover table-bordered" id="itemsTable">
+            <thead>
+                <tr class="text-center">
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Surname)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RegisterDate)
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        Akcje
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="text-center">
+                        <td>
+                            @if (item.Name == null)
+                            {
+                                <span class="badge badge-warning">Brak</span>
+                            }
+                            else
+                            {
+                                @item.Name
+                            }
+                        </td>
+                        <td>
+                            @if (item.Surname == null)
+                            {
+                                <span class="badge badge-warning">Brak</span>
+                            }
+                            else
+                            {
+                                @item.Surname
+                            }
+                        </td>
+                        <td>
+                            @item.UserName
+                        </td>
+                        <td>
+                            @item.Email
+                        </td>
+                        <td>
+                            @item.RegisterDate.ToShortDateString()
+                        </td>
+                        <td>
+                            @if (item.EmailConfirmed == true)
+                            {
+                                <span class="badge badge-success">Aktywowany</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-danger">Nieaktywowany</span>
+                            }
+                            /
+                            @if (item.Enabled == true)
+                            {
+                                <span class="badge badge-success">Włączony</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-danger">Zablokowany</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <a href="@Url.Action("Details", "UsersAdmin", new { id = item.Id })"><i class="fa fa-eye fa-lg"></i></a>
+                            <a href="@Url.Action("Edit", "UsersAdmin", new { id = item.Id })"><i class="fa fa-pencil-square-o fa-lg"></i></a>
+                            <a href="#" class="buttonDelete" onclick="setId('@item.Id')"><i class="fa fa-trash fa-lg"></i></a>
+
+                            @using (Html.BeginForm("Delete", "UsersAdmin", new { id = item.Id }, FormMethod.Post, htmlAttributes: new { id = "deleteForm" + item.Id }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="submit" hidden />
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/DatatablesJS")
+    @Scripts.Render("~/SweetAlert")
+    <script type="text/javascript">
+        $('#itemsTable').DataTable();
+        var global;
+        function setId(id) {
+            global = id;
+        };
+
+        $('.buttonDelete').click(function () {
+            swal({
+                title: "Jesteś pewny?",
+                text: "Nie będziesz w stanie cofnąć tej operacji!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Tak, usuń!",
+                cancelButtonText: "Nie, cofnij!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    swal("Usunięte!", "Element został usunięty", "success");
+                    $('.confirm').on('click', () => {
+                        $('#deleteForm' + global).submit();
+                    })
+                } else {
+                    swal("Anulowano", "Dane nie zostały usunięte", "error");
+                }
+            });
+        });
+    </script>
+}

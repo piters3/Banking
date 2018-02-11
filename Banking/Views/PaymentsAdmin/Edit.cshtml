@@ -1,0 +1,84 @@
+﻿@model Banking.Models.PaymentAdminViewModel
+
+@{
+    ViewBag.Title = "Edytowanie płatności";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Breadcrumb{
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-university"></i> @ViewBag.Title</h1>
+            <p>Zarządzanie płatnościami</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"> <a href="@Url.Action("Index", "PanelAdmin")"><i class="fa fa-home fa-lg"></i></a></li>
+            <li class="breadcrumb-item">@ViewBag.Title</li>
+        </ul>
+    </div>
+}
+
+<div class="col-md-6">
+    <div class="tile">
+        @using (Html.BeginForm("Edit", "PaymentsAdmin", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                @if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count > 0)
+                {
+                    <div class="alert alert-dismissible alert-danger">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    </div>
+                }
+                <div class="form-group">
+                    @Html.LabelFor(model => model.From)
+                    @Html.DropDownListFor(model => model.From, ViewBag.BankAccountsList as SelectList, "Wybierz", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.From, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.To)
+                    @Html.DropDownListFor(model => model.To, ViewBag.BankAccountsList as SelectList, "Wybierz", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.To, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PaymentDate)
+                    @Html.TextBoxFor(model => model.PaymentDate, new { @class = "form-control", id = "paymentDate", placeholder = "Wybierz datę" })
+                    @Html.ValidationMessageFor(model => model.PaymentDate, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.OperationType)
+                    @Html.EnumDropDownListFor(model => model.OperationType, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.OperationType, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Amount)
+                    @Html.TextBoxFor(model => model.Amount, new { @class = "form-control", type = "number", min = "0", step = "100" })
+                    @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Title)
+                    @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                </div>
+                <div class="tile-footer">
+                    <button class="btn btn-primary" type="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i>Zapisz</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/Validate")
+    @Scripts.Render("~/DatePicker")
+
+    <script type="text/javascript">
+        $('#paymentDate').datepicker({
+            format: "dd.mm.yyyy",
+            autoclose: true,
+            todayHighlight: true,
+            language: 'pl'
+        });
+    </script>
+}

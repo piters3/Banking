@@ -1,0 +1,79 @@
+﻿@model Banking.Entities.User
+@{
+    ViewBag.Title = "Zarządzanie kontem";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (@ViewBag.StatusMessage != "")
+{
+    <div class="alert alert-dismissible alert-success">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Świetnie!</strong> @ViewBag.StatusMessage
+    </div>
+
+}
+<div class="col-12">
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Surname)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Surname)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.City)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.City)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PostalCode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PostalCode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RegisterDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RegisterDate)
+        </dd>
+        <dd>
+            @Html.ActionLink("Edytuj dane", "EditAccount")
+        </dd>
+    </dl>
+</div>
+
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Hasło:</dt>
+        <dd>
+            @Html.ActionLink("Zmień hasło", "ChangePassword")
+        </dd>
+        <dt>Moje wypożyczenia:</dt>
+        <dd>
+            @Html.ActionLink("Lista", "UserBorrows", "Catalog")
+        </dd>
+    </dl>
+</div>

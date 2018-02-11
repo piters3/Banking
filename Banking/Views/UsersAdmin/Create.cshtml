@@ -1,0 +1,107 @@
+﻿@model Banking.Models.UserViewModel
+
+@{
+    ViewBag.Title = "Dodawanie użytkownika";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@section Breadcrumb{
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-users"></i> @ViewBag.Title</h1>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"> <a href="@Url.Action("Index", "PanelAdmin")"><i class="fa fa-home fa-lg"></i></a></li>
+            <li class="breadcrumb-item"> <a href="@Url.Action("Index", "UsersAdmin")">Użytkownicy</a></li>
+            <li class="breadcrumb-item">@ViewBag.Title</li>
+        </ul>
+    </div>
+}
+
+<div class="col-md-6">
+    <div class="tile">
+        @using (Html.BeginForm("Create", "UsersAdmin", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                @Html.HiddenFor(model => model.Id)
+                @if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count > 0)
+                {
+                    <div class="alert alert-dismissible alert-danger">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    </div>
+                }
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UserName)
+                    @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email)
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RolesList)
+
+                    @foreach (var item in (SelectList)ViewBag.RoleId)
+                    {
+                        <input type="radio" name="SelectedRoles" id="@item.Value" value="@item.Value" class="checkbox-inline" required />
+                        @Html.Label(item.Value, new { @class = "control-label" })
+                    }
+
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.EmailConfirmed)
+
+                    @Html.CheckBoxFor(m => m.EmailConfirmed, new { @class = "checkbox-inline", id = "emailConfirmed" })
+                    @Html.Label("emailConfirmed", "Konto aktywowane", new { @class = "control-label" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Enabled)
+                    @Html.CheckBoxFor(m => m.Enabled, new { @class = "checkbox-inline", id = "status" })
+                    @Html.Label("status", "Konto włączone", new { @class = "control-label" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name)
+                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Surname)
+                    @Html.TextBoxFor(model => model.Surname, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Surname, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Address)
+                    @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.City)
+                    @Html.TextBoxFor(model => model.City, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PostalCode)
+                    @Html.TextBoxFor(model => model.PostalCode, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PostalCode, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PhoneNumber)
+                    @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+                </div>
+                <div class="tile-footer">
+                    <button class="btn btn-primary" type="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i>Zapisz</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+    </div>
+@section Scripts {
+    @Scripts.Render("~/Validate")
+}

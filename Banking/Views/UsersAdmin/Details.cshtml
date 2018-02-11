@@ -1,0 +1,176 @@
+﻿@model Banking.Models.UserViewModel
+
+@{
+    ViewBag.Title = "Szczegóły użytkownika";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Breadcrumb{
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-users"></i> @ViewBag.Title</h1>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"> <a href="@Url.Action("Index", "PanelAdmin")"><i class="fa fa-home fa-lg"></i></a></li>
+            <li class="breadcrumb-item"> <a href="@Url.Action("Index", "UsersAdmin")">Użytkownicy</a></li>
+            <li class="breadcrumb-item">@ViewBag.Title</li>
+        </ul>
+    </div>
+}
+
+<div class="col-md-6">
+    <div class="tile">
+        <div class="tile-title-w-btn">
+            <h3 class="title">@ViewBag.Title</h3>
+            <div class="btn-group text-right">
+                <a class="btn btn-primary" href="@Url.Action("Edit", "UsersAdmin", new { id = Model.Id })"><i class="fa fa-lg fa-edit"></i></a>
+                <a class="btn btn-primary buttonDelete" href="#"><i class="fa fa-trash fa-lg"></i></a>
+
+                @using (Html.BeginForm("Delete", "UsersAdmin", new { id = Model.Id }, FormMethod.Post, htmlAttributes: new { id = "deleteForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="submit" hidden />
+                }
+            </div>
+        </div>
+        <div class="tile-body">
+            <b> @Html.DisplayNameFor(model => model.Id) </b><br>
+            @Html.DisplayFor(model => model.Id)
+        </div>
+        <div class="tile-body">
+            <b> @Html.DisplayNameFor(model => model.UserName) </b><br>
+            @Html.DisplayFor(model => model.UserName)
+        </div>
+        <div class="tile-body">
+            <b> @Html.DisplayNameFor(model => model.RegisterDate) </b><br>
+            @Html.DisplayFor(model => model.RegisterDate)
+        </div>
+        <div class="tile-body">
+            <b> @Html.DisplayNameFor(model => model.Email) </b><br>
+            @Html.DisplayFor(model => model.Email)
+        </div>
+        <div class="tile-body">
+            <b> Role </b><br>
+            @foreach (var role in ViewBag.RoleNames)
+            {
+                @role
+            }
+        </div>
+        <div class="tile-body">
+            <b> @Html.DisplayNameFor(model => model.EmailConfirmed) </b><br>
+            @if (Model.EmailConfirmed == true)
+            {
+                <span class="badge badge-success">Aktywowany</span>
+            }
+            else
+            {
+                <span class="badge badge-danger">Nieaktywowany</span>
+            }
+        </div>
+        <div class="tile-body">
+            <b> @Html.DisplayNameFor(model => model.Enabled) </b><br>
+            @if (Model.Enabled == true)
+            {
+                <span class="badge badge-success">Włączone</span>
+            }
+            else
+            {
+                <span class="badge badge-danger">Zablokowane</span>
+            }
+        </div>
+        <div class="tile-body">
+            <b> @Html.DisplayNameFor(model => model.Name) </b><br>
+            @if (Model.Name == null)
+            {
+                <span class="badge badge-warning">Brak</span>
+            }
+            else
+            {
+                @Model.Name
+            }
+        </div>
+        <div class="tile-body">
+            <b> @Html.DisplayNameFor(model => model.Surname) </b><br>
+            @if (Model.Surname == null)
+            {
+                <span class="badge badge-warning">Brak</span>
+            }
+            else
+            {
+                @Model.Surname
+            }
+        </div>
+        <div class="tile-body">
+            <b> @Html.DisplayNameFor(model => model.Address) </b><br>
+            @if (Model.Address == null)
+            {
+                <span class="badge badge-warning">Brak</span>
+            }
+            else
+            {
+                @Model.Address
+            }
+        </div>
+        <div class="tile-body">
+            <b> @Html.DisplayNameFor(model => model.City) </b><br>
+            @if (Model.City == null)
+            {
+                <span class="badge badge-warning">Brak</span>
+            }
+            else
+            {
+                @Model.City
+            }
+        </div>
+        <div class="tile-body">
+            <b> @Html.DisplayNameFor(model => model.PostalCode) </b><br>
+            @if (Model.PostalCode == null)
+            {
+                <span class="badge badge-warning">Brak</span>
+            }
+            else
+            {
+                @Model.PostalCode
+            }
+        </div>
+        <div class="tile-body">
+            <b> @Html.DisplayNameFor(model => model.PhoneNumber) </b><br>
+            @if (Model.PhoneNumber == null)
+            {
+                <span class="badge badge-warning">Brak</span>
+            }
+            else
+            {
+                @Model.PhoneNumber
+            }
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/SweetAlert")
+    <script type="text/javascript">
+        $('.buttonDelete').click(function () {
+            swal({
+                title: "Jesteś pewny?",
+                text: "Nie będziesz w stanie cofnąć tej operacji!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Tak, usuń!",
+                cancelButtonText: "Nie, cofnij!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    swal("Usunięte!", "Element został usunięty", "success");
+                    $('.confirm').on('click', () => {
+                        $('#deleteForm').submit();
+                    })
+                } else {
+                    swal("Anulowano", "Dane nie zostały usunięte", "error");
+                }
+            });
+        });
+    </script>
+}
