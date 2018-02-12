@@ -32,6 +32,8 @@ namespace Banking.Models
         //[Required]
         [Display(Name = "Użytkownik")]
         public string UserId { get; set; }
+
+        [Display(Name = "Użytkownik")]
         public virtual User User { get; set; }
     }
 }

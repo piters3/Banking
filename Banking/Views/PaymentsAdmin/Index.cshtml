@@ -11,7 +11,7 @@
 @section Breadcrumb{
     <div class="app-title">
         <div>
-            <h1><i class="fa fa-university"></i> @ViewBag.Title</h1>
+            <h1><i class="fa fa-credit-card"></i> @ViewBag.Title</h1>
             <p>Zarządzanie płatnościami</p>
         </div>
         <ul class="app-breadcrumb breadcrumb">
@@ -54,10 +54,10 @@
                 {
                     <tr class="text-center">
                         <td>
-                            @item.From
+                            @Html.ActionLink(item.From.User.ToString(), "Details","UsersAdmin", new {id = item.From.User.Id}, null)
                         </td>
                         <td>
-                            @item.To
+                            @Html.ActionLink(item.To.User.ToString(), "Details","UsersAdmin", new {id = item.To.User.Id}, null)
                         </td>
                         <td>
                             @item.PaymentDate.ToShortDateString()

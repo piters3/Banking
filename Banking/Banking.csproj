@@ -196,6 +196,8 @@
     </Compile>
     <Compile Include="Helpers\HtmlHelpers.cs" />
     <Compile Include="Infrastructure\BankingContext.cs" />
+    <Compile Include="Infrastructure\IGenericRepository.cs" />
+    <Compile Include="Infrastructure\GenericRepository.cs" />
     <Compile Include="Infrastructure\IRepository.cs" />
     <Compile Include="Infrastructure\Repository.cs" />
     <Compile Include="Migrations\Configuration.cs" />
@@ -288,6 +290,7 @@
     <Content Include="Views\PaymentsAdmin\Index.cshtml" />
     <Content Include="Views\PaymentsAdmin\Create.cshtml" />
     <Content Include="Views\PaymentsAdmin\Edit.cshtml" />
+    <Content Include="Views\Shared\_LogoutAdminPartial.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -49,5 +50,15 @@ namespace Banking.Entities
 
         [Display(Name = "Data rejestracji")]
         public DateTime RegisterDate { get; set; }
+
+        public override string ToString()
+        {
+            if (Name != null)
+            {
+                return Name + " " + Surname + ", " + Address + ", " + PostalCode + " " + City;
+            }
+            else
+                return null;
+        }
     }
 }

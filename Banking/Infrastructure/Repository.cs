@@ -1,61 +1,101 @@
-﻿using System;
+﻿using Banking.Entities;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 
 namespace Banking.Infrastructure
 {
-    public class Repository<T>: IRepository<T> where T : class
+    public class Repository : IRepository, IDisposable
     {
         private BankingContext _ctx;
-        private DbSet<T> _dbSet;
         private bool disposed = false;
 
         public Repository(BankingContext ctx)
         {
             _ctx = ctx;
-            _dbSet = _ctx.Set<T>();
         }
 
-        public IEnumerable<T> GetAll()
-        {
-            return _dbSet.ToList();
-        }
-
-        public virtual T GetById(object id)
-        {
-            return _dbSet.Find(id);
-        }
-
-        public virtual void Insert(T entity)
-        {
-            _dbSet.Add(entity);
-        }
-
-        public virtual void Delete(object id)
-        {
-            T entityToDelete = _dbSet.Find(id);
-            Delete(entityToDelete);
-        }
-
-        public virtual void Delete(T entityToDelete)
-        {
-            if (_ctx.Entry(entityToDelete).State == EntityState.Detached)
-            {
-                _dbSet.Attach(entityToDelete);
-            }
-            _dbSet.Remove(entityToDelete);
-        }
-
-        public virtual void Update(T entityToUpdate)
-        {
-            _dbSet.Attach(entityToUpdate);
-            _ctx.Entry(entityToUpdate).State = EntityState.Modified;
-        }
-
-        public virtual void Save()
+        public void Save()
         {
             _ctx.SaveChanges();
+        }
+
+
+        public IEnumerable<User> GetUsers()
+        {
+            return _ctx.Users.ToList();
+        }
+
+        public User GetUser(string id)
+        {
+            return _ctx.Users.Find(id);
+        }
+
+        public void Insert(User user)
+        {
+            _ctx.Users.Add(user);
+        }
+
+        public void Update(User user)
+        {
+            _ctx.Entry(user).State = EntityState.Modified;
+        }
+
+        public void Delete(User user)
+        {
+            _ctx.Users.Remove(user);
+        }
+
+        public IEnumerable<BankAccount> GetBankAccounts()
+        {
+            return _ctx.BankAccounts.ToList();
+        }
+
+        public BankAccount GetBankAccount(Guid accountNumber)
+        {
+            return _ctx.BankAccounts.Find(accountNumber);
+        }
+
+        public void Insert(BankAccount account)
+        {
+            _ctx.BankAccounts.Add(account);
+        }
+
+        public void Update(BankAccount account)
+        {
+            _ctx.Entry(account).State = EntityState.Modified;
+        }
+
+        public void Delete(BankAccount account)
+        {
+            _ctx.BankAccounts.Remove(account);
+        }
+
+
+        public IEnumerable<Payment> GetPayments()
+        {
+            return _ctx.Payments.ToList();
+        }
+
+        public Payment GetPayment(int id)
+        {
+            return _ctx.Payments.Find(id);
+        }
+
+        public void Insert(Payment payment)
+        {
+            _ctx.Payments.Add(payment);
+        }
+
+        public void Update(Payment payment)
+        {
+            _ctx.Entry(payment).State = EntityState.Modified;
+        }
+
+        public void Delete(Payment payment)
+        {
+            _ctx.Payments.Remove(payment);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -75,6 +115,5 @@ namespace Banking.Infrastructure
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
     }
 }

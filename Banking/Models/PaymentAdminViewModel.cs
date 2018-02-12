@@ -9,10 +9,10 @@ namespace Banking.Models
         public int Id { get; set; }
 
         [Display(Name = "Nadawca")]
-        public Guid From { get; set; }
+        public BankAccount From { get; set; }
 
         [Display(Name = "Odbiorca")]
-        public Guid To { get; set; }
+        public BankAccount To { get; set; }
 
         [Display(Name = "Kwota operacji")]
         public double Amount { get; set; }
@@ -26,6 +26,6 @@ namespace Banking.Models
         [Display(Name = "Rodzaj operacji")]
         public TypeOfOperation OperationType { get; set; }
 
-        public virtual BankAccount Account { get; set; }
+        //public virtual BankAccount Account { get; set; }
     }
 }

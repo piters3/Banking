@@ -1,6 +1,7 @@
 ﻿using Banking.Entities;
 using Banking.Infrastructure;
 using Banking.Models;
+using System;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -10,20 +11,17 @@ namespace Banking.Controllers
     [Authorize(Roles = "admin")]
     public class PaymentsAdminController : Controller
     {
-        private IRepository<Payment> _repo;
-        private IRepository<BankAccount> _bankAccountsRepo;
+        private IRepository _repo;
 
-        public PaymentsAdminController(IRepository<Payment> repo, IRepository<BankAccount> bankAccountsRepo)
+        public PaymentsAdminController(IRepository repo)
         {
             _repo = repo;
-            _bankAccountsRepo = bankAccountsRepo;
         }
 
         public ActionResult Index()
         {
-            var payments = _repo.GetAll().Select(p => new PaymentAdminViewModel()
+            var payments = _repo.GetPayments().Select(p => new PaymentAdminViewModel()
             {
-                Account = p.Account,
                 Amount = p.Amount,
                 From = p.From,
                 Id = p.Id,
@@ -38,7 +36,7 @@ namespace Banking.Controllers
 
         public ActionResult Create()
         {
-            ViewBag.BankAccountsList = new SelectList(_bankAccountsRepo.GetAll(), "AccountNumber", "User.UserName");
+            ViewBag.BankAccountsList = new SelectList(_repo.GetBankAccounts(), "AccountNumber", "User.UserName");
             return View();
         }
 
@@ -52,36 +50,39 @@ namespace Banking.Controllers
                 Payment p = new Payment()
                 {
                     Id = model.Id,
-                    From = model.From,
-                    To = model.To,
+                    From = _repo.GetBankAccount(model.From.AccountNumber),
+                    To = _repo.GetBankAccount(model.To.AccountNumber),
                     Amount = model.Amount,
                     PaymentDate = model.PaymentDate,
                     Title = model.Title,
                     OperationType = model.OperationType,
-                    Account = model.Account
                 };
 
-                //p.Account.Balance += model.Amount;
-
-
-                _repo.Insert(p);
-                _repo.Save();
-                TempData["message"] = string.Format("Płatność została dodana!");
-                return RedirectToAction("Index");
+                if (p.From.AvailableFunds > model.Amount)
+                {
+                    p.From.Balance -= model.Amount;
+                    p.To.Balance += model.Amount;
+                    _repo.Insert(p);
+                    _repo.Save();
+                    TempData["message"] = string.Format("Płatność została dodana!");
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = string.Format("Za mała ilość środków na koncie!");
+                    return RedirectToAction("Index");
+                    throw new ArgumentOutOfRangeException("Za mało hasju");
+                }           
             }
-            ViewBag.BankAccountsList = new SelectList(_bankAccountsRepo.GetAll(), "AccountNumber", "User.UserName");
+            ViewBag.BankAccountsList = new SelectList(_repo.GetBankAccounts(), "AccountNumber", "User.UserName");
             ModelState.AddModelError("", "Błąd");
             return View(model);
         }
 
 
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Payment p = _repo.GetById(id);
+            Payment p = _repo.GetPayment(id);
             if (p == null)
             {
                 return HttpNotFound();
@@ -95,9 +96,8 @@ namespace Banking.Controllers
                 PaymentDate = p.PaymentDate,
                 Title = p.Title,
                 OperationType = p.OperationType,
-                Account = p.Account
             };
-            ViewBag.BankAccountsList = new SelectList(_bankAccountsRepo.GetAll(), "AccountNumber", "User.UserName");
+            ViewBag.BankAccountsList = new SelectList(_repo.GetBankAccounts(), "AccountNumber", "User.UserName");
 
             return View(model);
         }
@@ -117,7 +117,6 @@ namespace Banking.Controllers
                     PaymentDate = model.PaymentDate,
                     Title = model.Title,
                     OperationType = model.OperationType,
-                    Account = model.Account
                 };
 
                 _repo.Update(p);
@@ -126,7 +125,7 @@ namespace Banking.Controllers
                 TempData["message"] = string.Format("Płatność została zedytowana!");
                 return RedirectToAction("Index");
             }
-            ViewBag.BankAccountsList = new SelectList(_bankAccountsRepo.GetAll(), "AccountNumber", "User.UserName");
+            ViewBag.BankAccountsList = new SelectList(_repo.GetBankAccounts(), "AccountNumber", "User.UserName");
             ModelState.AddModelError("", "Błąd");
             return View(model);
         }
@@ -134,13 +133,9 @@ namespace Banking.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Payment p = _repo.GetById(id);
+            Payment p = _repo.GetPayment(id);
             if (p == null)
             {
                 return HttpNotFound();

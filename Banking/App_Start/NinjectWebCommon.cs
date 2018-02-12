@@ -65,9 +65,8 @@ namespace Banking.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            //kernel.Bind<IRepository<BankAccount>>().To<Repository<BankAccount>>().InRequestScope();
-            kernel.Bind(typeof(IRepository<>)).To(typeof(Repository<>)).InRequestScope();
-            //kernel.Bind(typeof(IRepository<IClass>)).To(typeof(Repository<Class>))
+            //kernel.Bind(typeof(IGenericRepository<>)).To(typeof(GenericRepository<>)).InRequestScope();
+            kernel.Bind<IRepository>().To<Repository>().InRequestScope();
         }        
     }
 }

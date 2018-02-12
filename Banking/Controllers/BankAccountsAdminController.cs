@@ -11,19 +11,17 @@ namespace Banking.Controllers
     [Authorize(Roles = "admin")]
     public class BankAccountsAdminController : Controller
     {
-        private IRepository<BankAccount> _repo;
-        private IRepository<User> _usersRepo;
+        private IRepository _repo;
 
-        public BankAccountsAdminController(IRepository<BankAccount> repo, IRepository<User> usersRepo)
+        public BankAccountsAdminController(IRepository repo)
         {
             _repo = repo;
-            _usersRepo = usersRepo;
         }
 
 
         public ActionResult Index()
         {
-            var accounts = _repo.GetAll().Select(a => new BankAccountAdminViewModel()
+            var accounts = _repo.GetBankAccounts().Select(a => new BankAccountAdminViewModel()
             {
                 AccountNumber = a.AccountNumber,
                 AvailableFunds = a.AvailableFunds,
@@ -40,7 +38,7 @@ namespace Banking.Controllers
 
         public ActionResult Create()
         {
-            ViewBag.UsersList = new SelectList(_usersRepo.GetAll(), "Id", "UserName");
+            ViewBag.UsersList = new SelectList(_repo.GetUsers(), "Id", "UserName");
             return View();
         }
 
@@ -67,7 +65,7 @@ namespace Banking.Controllers
                 TempData["message"] = string.Format("Konto bankowe zostało dodane!");
                 return RedirectToAction("Index");
             }
-            ViewBag.UsersList = new SelectList(_usersRepo.GetAll(), "Id", "UserName", model.UserId);
+            ViewBag.UsersList = new SelectList(_repo.GetUsers(), "Id", "UserName", model.UserId);
             ModelState.AddModelError("", "Błąd");
             return View(model);
         }
@@ -79,7 +77,7 @@ namespace Banking.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BankAccount ba = _repo.GetById(id);
+            BankAccount ba = _repo.GetBankAccount(id);
             if (ba == null)
             {
                 return HttpNotFound();
@@ -101,7 +99,7 @@ namespace Banking.Controllers
         {
             if (ModelState.IsValid)
             {
-                BankAccount ba = _repo.GetById(model.AccountNumber);
+                BankAccount ba = _repo.GetBankAccount(model.AccountNumber);
 
                 ba.Frozen = model.Frozen;
                 ba.AccountNumber = model.AccountNumber;
@@ -126,7 +124,7 @@ namespace Banking.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BankAccount ba = _repo.GetById(id);
+            BankAccount ba = _repo.GetBankAccount(id);
             BankAccountAdminViewModel model = new BankAccountAdminViewModel()
             {
                 AvailableFunds = ba.AvailableFunds,
@@ -155,7 +153,7 @@ namespace Banking.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BankAccount ba = _repo.GetById(id);
+            BankAccount ba = _repo.GetBankAccount(id);
             if (ba == null)
             {
                 return HttpNotFound();

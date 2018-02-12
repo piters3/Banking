@@ -40,16 +40,16 @@ namespace Banking.Migrations
             List<Payment> adminPayments = new List<Payment>()
             {
                 new Payment(){
-                    From = adminBankAccount.AccountNumber,
-                    To = userBankAccount.AccountNumber,
+                    From = adminBankAccount,
+                    To = userBankAccount,
                     Amount = 999,
                     PaymentDate = DateTime.Now,
                     Title = "Czynsz za luty",
                     OperationType = TypeOfOperation.TransferToAccount
                 },
                  new Payment(){
-                    From = adminBankAccount.AccountNumber,
-                    To = userBankAccount.AccountNumber,
+                    From = adminBankAccount,
+                    To = userBankAccount,
                     Amount = 12345,
                     PaymentDate = DateTime.Now,
                     Title = "Skoki narciarskie",
@@ -62,8 +62,8 @@ namespace Banking.Migrations
             List<Payment> userPayments = new List<Payment>()
             {
                 new Payment(){
-                    From = userBankAccount.AccountNumber,
-                    To = adminBankAccount.AccountNumber,
+                    From = userBankAccount,
+                    To = adminBankAccount,
                     Amount = 50,
                     PaymentDate = DateTime.Now,
                     Title = "A masz",
@@ -80,8 +80,16 @@ namespace Banking.Migrations
                 Enabled = true,
                 RegisterDate = DateTime.Today,
                 SecurityStamp = Guid.NewGuid().ToString(),
+                Name = "Piotr",
+                Surname = "Strzelecki",
+                Address = "ul. Rymwida 4/18",
+                City = "Lublin",
+                PostalCode = "20-607",
+                PhoneNumber = "517906254",
                 Accounts = new List<BankAccount> { adminBankAccount }
             };
+
+            //adminBankAccount.User = admin;
 
             admin.Roles.Add(new IdentityUserRole { RoleId = adminRole.Id, UserId = admin.Id });
 
@@ -96,8 +104,18 @@ namespace Banking.Migrations
                 Enabled = true,
                 RegisterDate = DateTime.Today,
                 SecurityStamp = Guid.NewGuid().ToString(),
+                Name = "Mateusz",
+                Surname = "Szpinda",
+                Address = "ul. Zamoyskiego 42/26",
+                City = "Zamoœæ",
+                PostalCode = "22-400",
+                PhoneNumber = "798634092",
                 Accounts = new List<BankAccount> { userBankAccount }
             };
+
+
+            //userBankAccount.User = user;
+
 
             user.Roles.Add(new IdentityUserRole { RoleId = userRole.Id, UserId = user.Id });
 

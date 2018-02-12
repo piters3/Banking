@@ -26,7 +26,7 @@
             <thead>
                 <tr class="text-center">
                     <th>
-                        @Html.DisplayNameFor(model => model.User.UserName)
+                        @Html.DisplayNameFor(model => model.User)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.AccountNumber)
@@ -59,7 +59,7 @@
                 {
                     <tr class="text-center">
                         <td>
-                            @item.User.UserName
+                            @Html.ActionLink(item.User.ToString(), "Details","UsersAdmin", new {id = item.User.Id}, null)
                         </td>
                         <td>
                             @item.AccountNumber

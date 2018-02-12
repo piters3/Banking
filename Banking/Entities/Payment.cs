@@ -17,13 +17,13 @@ namespace Banking.Entities
     public class Payment
     {
         public int Id { get; set; }
-        public Guid From { get; set; }
-        public Guid To { get; set; }
+        public virtual BankAccount From { get; set; }
+        public virtual BankAccount To { get; set; }
         public double Amount { get; set; }
         public DateTime PaymentDate { get; set; }
         public string Title { get; set; }
         public TypeOfOperation OperationType { get; set; }
 
-        public virtual BankAccount Account { get; set; }
+        //public virtual BankAccount Account { get; set; }
     }
 }
