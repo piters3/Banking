@@ -1,0 +1,118 @@
+﻿@using Banking.Helpers
+@model Banking.Models.UserPanelViewModel
+@{
+    ViewBag.Title = "Moje płatności";
+}
+
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-4">
+            <h4>Moje konto:</h4>
+            @Model.BankAccount.AccountNumber.ToString().ToUpper()
+        </div>
+        <div class="col-md-2 margin-up">
+            <h6>Blokady</h6>
+            <h6>Saldo</h6>
+            <h6>Limit debetowy</h6>
+        </div>
+        <div class="col-md-2 text-right margin-up">
+            <h6>@Model.BankAccount.Locks PLN</h6>
+            <h6>@Model.BankAccount.Balance PLN</h6>
+            <h6>@Model.BankAccount.DebitLimit PLN </h6>
+        </div>
+        <div class="col-md-4 text-right">
+            <h4>Dostępne środki</h4>
+            <h3 class="text-primary"><strong>@Model.BankAccount.AvailableFunds PLN</strong></h3>
+        </div>
+    </div>
+
+    <hr />
+    <h3><strong>Ostatnie operacje zrealizowane na rachunku</strong></h3>
+    @Html.ActionLink("Wszystkie operacje", "Details", "UsersAdmin", null, new { @class = "btn btn-link btn-info pull-right" })
+
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th class="text-center">
+                    Data
+                </th>
+                <th>
+                    Odbiorca/Nadawca
+                </th>
+                <th>
+                    Opis operacji
+                </th>
+                <th>
+                    Rodzaj operacji
+                </th>
+                <th class="text-right">
+                    Kwota operacji
+                </th>
+                <th class="text-right">
+                    Saldo
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Payments)
+            {
+                <tr data-toggle="collapse" data-target="#@item.Id" class="accordion-toggle">
+                    <td class="text-center">
+                        @item.PaymentDate.ToShortDateString()
+                    </td>
+                    <td>
+                        @item.To.User.FullName().ToUpper()<br />
+                        @item.To.AccountNumber.ToString().ToUpper()
+                    </td>
+                    <td>
+                        @item.Title
+                    </td>
+                    <td>
+                        @Html.EnumDisplayNameFor(item.OperationType)
+                    </td>
+                    <td class="text-right">
+                        @item.Amount PLN
+                    </td>
+                    <td class="text-right">
+                        @item.From.Balance PLN
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6" class="hiddenRow">
+                        <div class="accordion-body collapse padd" id="@item.Id">
+                            <div class="row">
+                                <div class="col-md-3 text-right header">
+                                    Data operacji<br />
+                                    Rodzaj operacji<br />
+                                    Kwota operacji<br />
+                                    Saldo po operacji
+                                </div>
+                                <div class="col-md-3">
+                                    @item.PaymentDate.ToShortDateString()<br />
+                                    @Html.EnumDisplayNameFor(item.OperationType)<br />
+                                    @item.Amount PLN<br />
+                                    @item.From.Balance PLN
+                                </div>
+                                <div class="col-md-2 text-right">
+                                    Rachunek odbiorcy<br />
+                                    Nazwa odbiorcy<br />
+                                    Adres odbiorcy<br />
+                                    Tytuł
+                                </div>
+                                <div class="col-md-4">
+                                    @item.To.AccountNumber.ToString().ToUpper()<br />
+                                    @item.To.User.FullName().ToUpper()<br />
+                                    @item.To.User.FullAddress().ToUpper()<br />
+                                    @item.Title
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section Scripts {
+}
+

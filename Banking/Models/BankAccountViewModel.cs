@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Banking.Models
 {
-    public class BankAccountAdminViewModel
+    public class BankAccountViewModel
     {
         [Display(Name = "Numer konta")]
         public Guid AccountNumber { get; set; }

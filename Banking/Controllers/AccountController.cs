@@ -21,7 +21,7 @@ namespace Banking.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -33,9 +33,9 @@ namespace Banking.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -108,7 +108,7 @@ namespace Banking.Controllers
             }
         }
 
-        
+
 
         //
         // GET: /Account/Register
@@ -194,7 +194,7 @@ namespace Banking.Controllers
                 }
 
                 string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code }, protocol: Request.Url.Scheme);
                 await UserManager.SendEmailAsync(user.Id, "Resetowanie hasła ", "Zresetuj swoje hasło klikając ten link: <a href=\"" + callbackUrl + "\">Link</a>");
                 TempData["message"] = string.Format("Sprawdź swój email, aby zresetować hasło");
                 return RedirectToAction("Index", "Home");
@@ -252,7 +252,7 @@ namespace Banking.Controllers
             return View();
         }
 
-           
+
 
         protected override void Dispose(bool disposing)
         {

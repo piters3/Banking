@@ -18,13 +18,6 @@ namespace Banking.Migrations
 
         protected override void Seed(BankingContext context)
         {
-            //if (!System.Diagnostics.Debugger.IsAttached)
-            //    System.Diagnostics.Debugger.Launch();
-            AddUsersAndRoles(context);
-        }
-
-        private static void AddUsersAndRoles(BankingContext context)
-        {
             var adminRole = new IdentityRole { Name = "admin", Id = Guid.NewGuid().ToString() };
             var userRole = new IdentityRole { Name = "user", Id = Guid.NewGuid().ToString() };
             context.Roles.Add(adminRole);
@@ -32,10 +25,9 @@ namespace Banking.Migrations
 
             var hasher = new PasswordHasher();
 
-
-
             var adminBankAccount = new BankAccount() { };
             var userBankAccount = new BankAccount() { };
+            var user2BankAccount = new BankAccount() { };
 
             List<Payment> adminPayments = new List<Payment>()
             {
@@ -58,7 +50,6 @@ namespace Banking.Migrations
             };
 
 
-
             List<Payment> userPayments = new List<Payment>()
             {
                 new Payment(){
@@ -67,6 +58,26 @@ namespace Banking.Migrations
                     Amount = 50,
                     PaymentDate = DateTime.Now,
                     Title = "A masz",
+                    OperationType = TypeOfOperation.TransferToAccount
+                }
+            };
+
+            List<Payment> user2Payments = new List<Payment>()
+            {
+                new Payment(){
+                    From = user2BankAccount,
+                    To = adminBankAccount,
+                    Amount = 768,
+                    PaymentDate = DateTime.Now,
+                    Title = "Ram",
+                    OperationType = TypeOfOperation.TransferToAccount
+                },
+                  new Payment(){
+                    From = user2BankAccount,
+                    To = userBankAccount,
+                    Amount = 5799,
+                    PaymentDate = DateTime.Now,
+                    Title = "Komputer",
                     OperationType = TypeOfOperation.TransferToAccount
                 }
             };
@@ -89,7 +100,6 @@ namespace Banking.Migrations
                 Accounts = new List<BankAccount> { adminBankAccount }
             };
 
-            //adminBankAccount.User = admin;
 
             admin.Roles.Add(new IdentityUserRole { RoleId = adminRole.Id, UserId = admin.Id });
 
@@ -114,17 +124,41 @@ namespace Banking.Migrations
             };
 
 
-            //userBankAccount.User = user;
-
-
             user.Roles.Add(new IdentityUserRole { RoleId = userRole.Id, UserId = user.Id });
 
             context.Users.Add(user);
+
+
+            var user2 = new User
+            {
+                UserName = "user2",
+                Email = "use2r@user.com",
+                PasswordHash = hasher.HashPassword("user2"),
+                EmailConfirmed = true,
+                Enabled = true,
+                RegisterDate = DateTime.Today,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                Name = "Piotr",
+                Surname = "Sobiborowicz",
+                Address = "ul. Batalionów Ch³opskich 75",
+                City = "Rossosz",
+                PostalCode = "21-533",
+                PhoneNumber = "713465789",
+                Accounts = new List<BankAccount> { user2BankAccount }
+            };
+
+
+            user2.Roles.Add(new IdentityUserRole { RoleId = userRole.Id, UserId = user.Id });
+
+            context.Users.Add(user2);
 
             adminPayments.ForEach(m => context.Payments.AddOrUpdate(x => x.Id, m));
             context.SaveChanges();
 
             userPayments.ForEach(m => context.Payments.AddOrUpdate(x => x.Id, m));
+            context.SaveChanges();
+
+            user2Payments.ForEach(m => context.Payments.AddOrUpdate(x => x.Id, m));
             context.SaveChanges();
         }
     }

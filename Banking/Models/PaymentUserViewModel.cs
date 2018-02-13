@@ -4,23 +4,22 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Banking.Models
 {
-    public class PaymentAdminViewModel
+    public class PaymentUserViewModel
     {
         public int Id { get; set; }
 
-        [Display(Name = "Nadawca")]
-        public BankAccount From { get; set; }
+        public virtual BankAccount From { get; set; }
 
-        [Display(Name = "Odbiorca")]
-        public BankAccount To { get; set; }
+        [Display(Name = "Odbiorca/Nadawca")]
+        public virtual BankAccount To { get; set; }
 
         [Display(Name = "Kwota operacji")]
         public double Amount { get; set; }
 
-        [Display(Name = "Data operacji")]
+        [Display(Name = "Data")]
         public DateTime PaymentDate { get; set; }
 
-        [Display(Name = "Tytuł")]
+        [Display(Name = "Opis operacji")]
         public string Title { get; set; }
 
         [Display(Name = "Rodzaj operacji")]

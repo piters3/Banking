@@ -98,6 +98,19 @@ namespace Banking.Infrastructure
             _ctx.Payments.Remove(payment);
         }
 
+
+        public IEnumerable<Payment> GetUserPayments(string id)
+        {
+            return _ctx.Payments.Where(p => p.From.UserId == id).ToList();
+        }
+
+
+        public BankAccount GetUserBankAccount(string id)
+        {
+            return _ctx.BankAccounts.Where(b => b.UserId == id).FirstOrDefault();
+        }
+
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposed)

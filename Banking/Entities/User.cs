@@ -58,7 +58,28 @@ namespace Banking.Entities
                 return Name + " " + Surname + ", " + Address + ", " + PostalCode + " " + City;
             }
             else
-                return null;
+                return Email;
+        }
+
+
+        public string FullName()
+        {
+            if (Name != null)
+            {
+                return Surname + " " + Name;
+            }
+            else
+                return Email;
+        }
+
+        public string FullAddress()
+        {
+            if (Address != null)
+            {
+                return Address + " " + PostalCode + " " + City;
+            }
+            else
+                return "Brak danych";
         }
     }
 }

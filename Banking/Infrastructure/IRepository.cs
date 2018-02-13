@@ -25,5 +25,8 @@ namespace Banking.Infrastructure
         void Insert(Payment payment);
         void Delete(Payment payment);
         void Update(Payment payment);
+
+        IEnumerable<Payment> GetUserPayments(string id);
+        BankAccount GetUserBankAccount(string id);
     }
 }

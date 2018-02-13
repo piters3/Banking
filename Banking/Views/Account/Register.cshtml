@@ -1,47 +1,125 @@
-﻿@model Banking.Models.RegisterViewModel
+﻿@using Banking.Helpers
+@model Banking.Models.RegisterViewModel
 @{
     ViewBag.Title = "Rejestracja";
+    Layout = null;
 }
 
-<div class="col-md-6">
-    @using (Html.BeginForm("Register", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count > 0)
-        {
-            <div class="alert alert-dismissible alert-danger">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+    <meta name="description" content="Banking">
+    <meta name="author" content="Pioter">
+    <title>@ViewBag.Title | Banking</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+    @Styles.Render("~/UserCSS")
+</head>
+<body class="login-page sidebar-collapse">
+    <nav class="navbar navbar-expand-lg bg-primary fixed-top navbar-transparent" color-on-scroll="400">
+        <div class="container">
+            <div class="navbar-translate">
+                <a class="navbar-brand" href="@Url.Action("Index","Home")" rel="tooltip" title="Banking App" data-placement="bottom">
+                    Bank
+                </a>
+                <button class="navbar-toggler navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-bar bar1"></span>
+                    <span class="navbar-toggler-bar bar2"></span>
+                    <span class="navbar-toggler-bar bar3"></span>
+                </button>
             </div>
-        }
-        <div class="form-group">
-            @Html.LabelFor(m => m.UserName)
-            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+            <div class="collapse navbar-collapse justify-content-end" data-nav-image="../../Content/User/Img/blurred-image-1.jpg">
+                <ul class="navbar-nav">
+                    <li class="nav-item @Html.IsActive("Index", "Home")">@Html.ActionLink("Strona główna", "Index", "Home", null, new { @class = "nav-link" })</li>
+                    @if (Request.IsAuthenticated && User.IsInRole("admin"))
+                    {
+                        <li class="nav-item @Html.IsActive("Index", "PanelAdmin")">@Html.ActionLink("Panel administratora", "Index", "PanelAdmin", null, new { @class = "nav-link" })</li>
+                    }
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
         </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Email)
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+    </nav>
+    <div class="page-header" filter-color="orange">
+        <div class="page-header-image" style="background-image:url(../../Content/User/Img/login.jpg)"></div>
+        <div class="container">
+            <div class="col-md-4 content-center">
+                <div class="card card-login card-plain">
+                    @using (Html.BeginForm("Register", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count > 0)
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                <div class="container">
+                                    <strong>Niestety!</strong> @Html.ValidationSummary(true, "")
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">
+                                            <i class="now-ui-icons ui-1_simple-remove"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                        <div class="content">
+                            <div class="input-group form-group-no-border input-lg">
+                                <span class="input-group-addon">
+                                    <i class="now-ui-icons users_circle-08"></i>
+                                </span>
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "Login..." })
+                            </div>
+                            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                            <div class="input-group form-group-no-border input-lg">
+                                <span class="input-group-addon">
+                                    <i class="now-ui-icons ui-1_email-85"></i>
+                                </span>
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email..." })
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                            <div class="input-group form-group-no-border input-lg">
+                                <span class="input-group-addon">
+                                    <i class="now-ui-icons text_caps-small"></i>
+                                </span>
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Hasło..." })
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                            <div class="input-group form-group-no-border input-lg">
+                                <span class="input-group-addon">
+                                    <i class="now-ui-icons ui-1_lock-circle-open"></i>
+                                </span>
+                                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Powtórz hasło..." })
+                            </div>
+                            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="footer text-center">
+                            <button class="btn btn-primary btn-round btn-lg btn-block">Rejestruj</button>
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Password)
-            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.ConfirmPassword)
-            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
-        </div>
-        <div class="form-group">
-            <button class="btn btn-primary" type="submit">Rejestruj</button>
-        </div>
-    }
-</div>
+        <footer class="footer">
+            <div class="container">
+                <nav>
+                    <ul>
+                        <li>
+                            <a href="https://github.com/piters3">
+                                Piters3
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="copyright">
+                    &copy; @DateTime.Now.Year Piotr Strzelecki
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+@Scripts.Render("~/UserJS")
+@Scripts.Render("~/UserJSPlugins")
+@Scripts.Render("~/Validate")
 
-
-@section Scripts {
-    @Scripts.Render("~/Validate")
-}
+</html>

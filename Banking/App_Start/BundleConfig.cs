@@ -9,14 +9,26 @@ namespace Banking
             //USER CSS
             bundles.Add(new StyleBundle("~/UserCSS").Include(
                          "~/Content/User/bootstrap.min.css",
-                         "~/Content/User/sticky-footer-navbar.css"));
+                         //"~/Content/User/demo.css",
+                         "~/Content/User/now-ui-kit.css"));
 
 
             //USER JS
             bundles.Add(new ScriptBundle("~/UserJS").Include(
-                         "~/Scripts/User/jquery-3.1.1.slim.min.js",
-                         "~/Scripts/User/tether.min.js",
+                         "~/Scripts/User/jquery.3.2.1.min.js",
+                         "~/Scripts/User/popper.min.js",
                          "~/Scripts/User/bootstrap.min.js"));
+
+            //USER JS PLUGINS
+            bundles.Add(new ScriptBundle("~/UserJSPlugins").Include(
+                         "~/Scripts/User/bootstrap-switch.js",
+                         "~/Scripts/User/nouislider.min.js",
+                         "~/Scripts/User/bootstrap-datepicker.js",
+                         //"~/Scripts/User/jquery.sharrre.js",
+                         "~/Scripts/User/now-ui-kit.js"
+                         ));
+
+
 
             //ADMIN CSS
             bundles.Add(new StyleBundle("~/AdminCSS").Include(

@@ -21,7 +21,7 @@ namespace Banking.Controllers
 
         public ActionResult Index()
         {
-            var accounts = _repo.GetBankAccounts().Select(a => new BankAccountAdminViewModel()
+            var accounts = _repo.GetBankAccounts().Select(a => new BankAccountViewModel()
             {
                 AccountNumber = a.AccountNumber,
                 AvailableFunds = a.AvailableFunds,
@@ -45,7 +45,7 @@ namespace Banking.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(BankAccountAdminViewModel model)
+        public ActionResult Create(BankAccountViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -125,7 +125,7 @@ namespace Banking.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             BankAccount ba = _repo.GetBankAccount(id);
-            BankAccountAdminViewModel model = new BankAccountAdminViewModel()
+            BankAccountViewModel model = new BankAccountViewModel()
             {
                 AvailableFunds = ba.AvailableFunds,
                 Balance = ba.Balance,
