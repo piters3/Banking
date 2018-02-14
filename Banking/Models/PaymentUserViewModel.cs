@@ -24,5 +24,8 @@ namespace Banking.Models
 
         [Display(Name = "Rodzaj operacji")]
         public TypeOfOperation OperationType { get; set; }
+
+        [Display(Name = "Saldo po operacji")]
+        public double BalanceAfterOperation { get; set; }
     }
 }

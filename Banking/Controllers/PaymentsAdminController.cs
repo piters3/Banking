@@ -47,32 +47,45 @@ namespace Banking.Controllers
         {
             if (ModelState.IsValid)
             {
+                var from = _repo.GetBankAccount(model.From.AccountNumber);
+                var to = _repo.GetBankAccount(model.To.AccountNumber);
+
                 Payment p = new Payment()
                 {
                     Id = model.Id,
-                    From = _repo.GetBankAccount(model.From.AccountNumber),
-                    To = _repo.GetBankAccount(model.To.AccountNumber),
+                    From = from,
+                    To = to,
                     Amount = model.Amount,
                     PaymentDate = model.PaymentDate,
                     Title = model.Title,
-                    OperationType = model.OperationType,
+                    OperationType = model.OperationType,                
                 };
 
-                if (p.From.AvailableFunds > model.Amount)
+                if (p.OperationType == TypeOfOperation.PaymentToATM)
                 {
-                    p.From.Balance -= model.Amount;
-                    p.To.Balance += model.Amount;
+                    //p.To.Balance += model.Amount; //razy 2 ??
+                    p.BalanceAfterOperation = to.Balance += model.Amount;
+                    p.Title = "Bankomat";
                     _repo.Insert(p);
                     _repo.Save();
                     TempData["message"] = string.Format("Płatność została dodana!");
                     return RedirectToAction("Index");
                 }
+                //else if (p.From.AvailableFunds > model.Amount)
+                //{
+                //    p.From.Balance -= model.Amount;
+                //    p.To.Balance += model.Amount;
+                //    _repo.Insert(p);
+                //    _repo.Save();
+                //    TempData["message"] = string.Format("Płatność została dodana!");
+                //    return RedirectToAction("Index");
+                //}
                 else
                 {
                     TempData["error"] = string.Format("Za mała ilość środków na koncie!");
                     return RedirectToAction("Index");
                     throw new ArgumentOutOfRangeException("Za mało hasju");
-                }           
+                }
             }
             ViewBag.BankAccountsList = new SelectList(_repo.GetBankAccounts(), "AccountNumber", "User.UserName");
             ModelState.AddModelError("", "Błąd");

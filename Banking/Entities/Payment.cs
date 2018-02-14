@@ -10,7 +10,9 @@ namespace Banking.Entities
         [Display(Name = "Płatność kartą")]
         CardPayment,
         [Display(Name = "Wpłata gotówki we wpłatomacie")]
-        DepositoryCashPayment
+        PaymentToATM,
+        [Display(Name = "Wypłata z bankomatu")]
+        WithdrawalFromATM
     }
 
 
@@ -24,6 +26,20 @@ namespace Banking.Entities
         public string Title { get; set; }
         public TypeOfOperation OperationType { get; set; }
 
-        //public virtual BankAccount Account { get; set; }
+        //private double _balanceAfterOperation;
+
+        public double BalanceAfterOperation { get; set; }
+
+        //public double BalanceAfterOperation
+        //{
+        //    get
+        //    {
+        //        return _balanceAfterOperation;
+        //    }
+        //    private set
+        //    {
+        //        _balanceAfterOperation = To.Balance;
+        //    }
+        //}
     }
 }

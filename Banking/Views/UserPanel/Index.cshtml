@@ -74,7 +74,7 @@
                         @item.Amount PLN
                     </td>
                     <td class="text-right">
-                        @item.From.Balance PLN
+                        @item.BalanceAfterOperation PLN
                     </td>
                 </tr>
                 <tr>
@@ -91,7 +91,7 @@
                                     @item.PaymentDate.ToShortDateString()<br />
                                     @Html.EnumDisplayNameFor(item.OperationType)<br />
                                     @item.Amount PLN<br />
-                                    @item.From.Balance PLN
+                                    @item.BalanceAfterOperation PLN
                                 </div>
                                 <div class="col-md-2 text-right">
                                     Rachunek odbiorcy<br />

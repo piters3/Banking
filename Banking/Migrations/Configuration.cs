@@ -152,14 +152,14 @@ namespace Banking.Migrations
 
             context.Users.Add(user2);
 
-            adminPayments.ForEach(m => context.Payments.AddOrUpdate(x => x.Id, m));
-            context.SaveChanges();
+            //adminPayments.ForEach(m => context.Payments.AddOrUpdate(x => x.Id, m));
+            //context.SaveChanges();
 
-            userPayments.ForEach(m => context.Payments.AddOrUpdate(x => x.Id, m));
-            context.SaveChanges();
+            //userPayments.ForEach(m => context.Payments.AddOrUpdate(x => x.Id, m));
+            //context.SaveChanges();
 
-            user2Payments.ForEach(m => context.Payments.AddOrUpdate(x => x.Id, m));
-            context.SaveChanges();
+            //user2Payments.ForEach(m => context.Payments.AddOrUpdate(x => x.Id, m));
+            //context.SaveChanges();
         }
     }
 }
