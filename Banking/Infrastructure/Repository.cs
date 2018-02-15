@@ -101,7 +101,7 @@ namespace Banking.Infrastructure
 
         public IEnumerable<Payment> GetUserPayments(string id)
         {
-            return _ctx.Payments.Where(p => p.From.UserId == id).ToList();
+            return _ctx.Payments.Where(p => p.From.UserId == id).ToList().OrderByDescending(p=>p.Id);
         }
 
 

@@ -204,6 +204,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Models\EditBankAccountViewModel.cs" />
+    <Compile Include="Models\NewPaymentViewModel.cs" />
     <Compile Include="Models\PaymentAdminViewModel.cs" />
     <Compile Include="Models\BankAccountViewModel.cs" />
     <Compile Include="Models\ChangePasswordViewModel.cs" />
@@ -307,6 +308,8 @@
     <Content Include="Views\PaymentsAdmin\Edit.cshtml" />
     <Content Include="Views\Shared\_LogoutAdminPartial.cshtml" />
     <Content Include="Views\UserPanel\Index.cshtml" />
+    <Content Include="Views\UserPanel\Payments.cshtml" />
+    <Content Include="Views\UserPanel\NewPayment.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

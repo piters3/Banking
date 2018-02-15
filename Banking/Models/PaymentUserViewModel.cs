@@ -22,10 +22,10 @@ namespace Banking.Models
         [Display(Name = "Opis operacji")]
         public string Title { get; set; }
 
-        [Display(Name = "Rodzaj operacji")]
-        public TypeOfOperation OperationType { get; set; }
-
         [Display(Name = "Saldo po operacji")]
         public double BalanceAfterOperation { get; set; }
+
+        [Display(Name = "Rodzaj operacji")]
+        public TypeOfOperation OperationType { get; set; }
     }
 }

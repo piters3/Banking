@@ -1,5 +1,4 @@
-﻿@using Microsoft.AspNet.Identity
-@using Banking.Helpers
+﻿@using Banking.Helpers
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
@@ -7,7 +6,7 @@
         @Html.AntiForgeryToken()
 
         <ul class="nav navbar-nav navbar-right">
-            <li class="nav-item @Html.IsActive("Index", "Manage")">@Html.ActionLink("Witaj " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })</li>
+            <li class="nav-item @Html.IsActive("Index", "Manage")">@Html.ActionLink("Konto", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })</li>
             <li class="nav-item"><a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Wyloguj się</a></li>
         </ul>
     }

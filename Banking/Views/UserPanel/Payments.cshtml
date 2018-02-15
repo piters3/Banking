@@ -1,0 +1,103 @@
+﻿@using Banking.Helpers
+@model IEnumerable<Banking.Models.PaymentUserViewModel>
+@{
+    ViewBag.Title = "Payments";
+}
+
+@Styles.Render("~/DatatablesCSS")
+
+<div class="card card-deck">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped" id="itemsTable">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Data
+                        </th>
+                        <th>
+                            Odbiorca/Nadawca
+                        </th>
+                        <th>
+                            Opis operacji
+                        </th>
+                        <th>
+                            Rodzaj operacji
+                        </th>
+                        <th class="text-right">
+                            Kwota operacji
+                        </th>
+                        <th class="text-right">
+                            Saldo
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="text-center">
+                                @item.PaymentDate.ToShortDateString()
+                            </td>
+                            <td>
+                                @item.To.User.FullName().ToUpper()<br />
+                                @item.To.AccountNumber.ToString().ToUpper()
+                            </td>
+                            <td>
+                                @item.Title
+                            </td>
+                            <td>
+                                @Html.EnumDisplayNameFor(item.OperationType)
+                            </td>
+                            <td class="text-right">
+                                @if (item.Amount < 0)
+                                {
+                                    <p class="text-danger">
+                                        @item.Amount PLN
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p>
+                                        @item.Amount PLN
+                                    </p>
+                                }
+                            </td>
+                            <td class="text-right">
+                                @item.BalanceAfterOperation PLN
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/DatatablesJS")
+    <script type="text/javascript">
+        $('#itemsTable').DataTable({
+            pageLength: 10,
+            lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Wszystkie"]],
+            "language": {
+                "lengthMenu": "Pokaż _MENU_ rekordów",
+                "search": "Szukaj:",
+                "paginate": {
+                    "next": "Następna strona",
+                    "previous": "Poprzednia strona"
+                },
+                "emptyTable": "Brak danych",
+                "loadingRecords": "Proszę czekać - ładowanie...",
+                "processing": "Proszę czekać - ładowanie...",
+                "zeroRecords": "Brak rekordów do wyświetlenia",
+                "info": "Pokazuję stronę _PAGE_ z _PAGES_",
+                "infoFiltered": " - przefiltrowane z _MAX_ rekordów",
+                "infoEmpty": "Brak rekordów do wyświetlenia"
+            }
+        });
+    </script>
+}
+
+
+

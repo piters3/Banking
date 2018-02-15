@@ -1,6 +1,8 @@
-﻿using Banking.Infrastructure;
+﻿using Banking.Entities;
+using Banking.Infrastructure;
 using Banking.Models;
 using Microsoft.AspNet.Identity;
+using System;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -42,14 +44,83 @@ namespace Banking.Controllers
                 OperationType = p.OperationType,
                 PaymentDate = p.PaymentDate,
                 Title = p.Title,
-                To = p.To
+                To = p.To,
+                BalanceAfterOperation = p.BalanceAfterOperation
             });
 
-
-            return View(new UserPanelViewModel() {
+            return View(new UserPanelViewModel()
+            {
                 BankAccount = userBankAccount,
-                Payments = userPayments
+                Payments = userPayments.Take(6)
             });
+        }
+
+        public ActionResult Payments()
+        {
+            var id = User.Identity.GetUserId();
+
+            var userPayments = _repo.GetUserPayments(id).Select(p => new PaymentUserViewModel()
+            {
+                Amount = p.Amount,
+                From = p.From,
+                Id = p.Id,
+                OperationType = p.OperationType,
+                PaymentDate = p.PaymentDate,
+                Title = p.Title,
+                To = p.To,
+                BalanceAfterOperation = p.BalanceAfterOperation
+            });
+
+            return View(userPayments);
+        }
+
+
+        public ActionResult NewPayment()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult NewPayment(NewPaymentViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var id = User.Identity.GetUserId();
+                var from = _repo.GetUserBankAccount(id);
+                var to = _repo.GetBankAccount(model.AccountNumber);
+
+                if (from.AvailableFunds > model.Amount)
+                {
+                    Payment p = new Payment()
+                    {
+                        Id = model.Id,
+                        From = from,
+                        To = to,
+                        Amount = model.Amount*-1,
+                        PaymentDate = model.PaymentDate,
+                        Title = model.Title,
+                        OperationType = TypeOfOperation.TransferToAccount,
+                        BalanceAfterOperation = from.Balance - model.Amount
+                    };
+
+                    p.From.Balance -= model.Amount;
+                    p.To.Balance += model.Amount;
+
+                    _repo.Insert(p);
+                    _repo.Save();
+                    TempData["message"] = string.Format("Pomyślnie przelano pieniądze!");
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = string.Format("Za mała ilość środków na koncie!");
+                    return RedirectToAction("Index");
+                    throw new ArgumentOutOfRangeException("Za mało hasju");
+                }
+            }
+            ModelState.AddModelError("", "Błąd");
+            return View(model);
         }
     }
 }

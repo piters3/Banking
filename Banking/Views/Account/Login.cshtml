@@ -63,29 +63,48 @@
                                 </div>
                             </div>
                         }
-                            <div class="content">
-                                <div class="input-group form-group-no-border input-lg">
-                                    <span class="input-group-addon">
-                                        <i class="now-ui-icons users_circle-08"></i>
-                                    </span>
-                                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "Login..." })
+                        <div class="content">
+                            <div class="input-group form-group-no-border input-lg">
+                                <span class="input-group-addon">
+                                    <i class="now-ui-icons users_circle-08"></i>
+                                </span>
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "Login..." })
 
-                                </div>
-                                @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
-                                <div class="input-group form-group-no-border input-lg">
-                                    <span class="input-group-addon">
-                                        <i class="now-ui-icons text_caps-small"></i>
-                                    </span>
-                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Hasło..." })
-                                </div>
-                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                             </div>
-                        <div class="input-group form-group-no-border input-lg">
+                            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                            <div class="input-group form-group-no-border input-lg">
+                                <span class="input-group-addon">
+                                    <i class="now-ui-icons text_caps-small"></i>
+                                </span>
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Hasło..." })
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        </div>
+
+                        @*<div class="input-group form-group-no-border input-lg">
                             <div class="checkbox">
+                                <input id="checkbox2" type="checkbox" checked="">
+                                <label for="checkbox2">
+                                    Checked
+                                </label>
+                            </div>
+                        </div>
+                        <div class="input-group form-group-no-border input-lg">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" checked="">
+                                    <span class="form-check-sign"></span>
+                                    Checked
+                                </label>
+                            </div>
+                        </div>
+                        <div class="input-group form-group-no-border input-lg">
+                            <div class="form-check">
                                 @Html.CheckBoxFor(m => m.RememberMe)
                                 @Html.LabelFor(m => m.RememberMe)
                             </div>
-                        </div>
+                        </div>*@
+
                         <div class="footer text-center">
                             <button class="btn btn-primary btn-round btn-lg btn-block">Zaloguj</button>
                         </div>

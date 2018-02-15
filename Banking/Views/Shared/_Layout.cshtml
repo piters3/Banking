@@ -12,10 +12,10 @@
     @Styles.Render("~/UserCSS")
 </head>
 <body class="template-page sidebar-collapse">
-    <nav class="navbar navbar-expand-lg bg-primary fixed-top " color-on-scroll="400">
+    <nav class="navbar navbar-expand-lg bg-primary fixed-top " color-on-scroll="350">
         <div class="container">
             <div class="navbar-translate">
-                <a class="navbar-brand" href="@Url.Action("Index","Home")" rel="tooltip" title="Banking App" data-placement="bottom">
+                <a class="navbar-brand" href="@Url.Action("Index","Home")" rel="tooltip" title="Strona główna" data-placement="bottom">
                     Bank
                 </a>
                 <button class="navbar-toggler navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,17 +31,21 @@
                     {
                         <li class="nav-item @Html.IsActive("Index", "PanelAdmin")">@Html.ActionLink("Panel administratora", "Index", "PanelAdmin", null, new { @class = "nav-link" })</li>
                     }
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li class="nav-item @Html.IsActive("Index", "UserPanel")">@Html.ActionLink("Płatności", "Index", "UserPanel", null, new { @class = "nav-link" })</li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
     </nav>
-    @*<div class="wrapper">
-            <div class="page-header">
-                <div class="page-header-image" data-parallax="true" style="background-image:url('../../Content/User/Img/bg11.jpg')">
-                </div>
+    <div class="wrapper">
+        <div class="page-header page-header-small">
+            <div class="page-header-image" data-parallax="true" style="background-image:url('../../Content/User/Img/bg3.jpg')">
             </div>
-        </div>*@
+        </div>
+    </div>
     <div class="section">
         <div class="container">
             <div class="row">
@@ -83,7 +87,8 @@
             </div>
         </div>
     </div>
-    <footer class="footer">
+
+    <footer class="footer" data-background-color="black">
         <div class="container">
             <nav>
                 <ul>
