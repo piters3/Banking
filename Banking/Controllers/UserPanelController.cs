@@ -77,6 +77,10 @@ namespace Banking.Controllers
 
         public ActionResult NewPayment()
         {
+            var id = User.Identity.GetUserId();
+            var from = _repo.GetUserBankAccount(id);
+            ViewBag.AccountNumber = from.AccountNumber.ToString().ToUpper();
+            ViewBag.AvailableFunds = from.AvailableFunds;
             return View();
         }
 
@@ -84,12 +88,13 @@ namespace Banking.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult NewPayment(NewPaymentViewModel model)
         {
+            //var id = User.Identity.GetUserId();
+            var id = "id";
+            var from = _repo.GetUserBankAccount(id);
+            var to = _repo.GetBankAccount(model.AccountNumber);
+
             if (ModelState.IsValid)
             {
-                var id = User.Identity.GetUserId();
-                var from = _repo.GetUserBankAccount(id);
-                var to = _repo.GetBankAccount(model.AccountNumber);
-
                 if (from.AvailableFunds > model.Amount)
                 {
                     Payment p = new Payment()
@@ -97,7 +102,7 @@ namespace Banking.Controllers
                         Id = model.Id,
                         From = from,
                         To = to,
-                        Amount = model.Amount*-1,
+                        Amount = model.Amount * -1,
                         PaymentDate = model.PaymentDate,
                         Title = model.Title,
                         OperationType = TypeOfOperation.TransferToAccount,
@@ -114,12 +119,14 @@ namespace Banking.Controllers
                 }
                 else
                 {
-                    TempData["error"] = string.Format("Za mała ilość środków na koncie!");
-                    return RedirectToAction("Index");
+                    //TempData["error"] = string.Format("Za mała ilość środków na koncie!");
+                    //return RedirectToAction("Index");
                     throw new ArgumentOutOfRangeException("Za mało hasju");
                 }
             }
             ModelState.AddModelError("", "Błąd");
+            ViewBag.AccountNumber = from.AccountNumber.ToString().ToUpper();
+            ViewBag.AvailableFunds = from.AvailableFunds;
             return View(model);
         }
     }

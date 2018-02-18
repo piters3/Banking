@@ -54,12 +54,12 @@
                         {
                             <div class="alert alert-danger" role="alert">
                                 <div class="container">
-                                    <strong>Niestety!</strong> @Html.ValidationSummary(true, "")
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">
                                             <i class="now-ui-icons ui-1_simple-remove"></i>
                                         </span>
                                     </button>
+                                    <strong>Niestety!</strong> @Html.ValidationSummary(true, "")
                                 </div>
                             </div>
                         }
@@ -82,28 +82,28 @@
                         </div>
 
                         @*<div class="input-group form-group-no-border input-lg">
-                            <div class="checkbox">
-                                <input id="checkbox2" type="checkbox" checked="">
-                                <label for="checkbox2">
-                                    Checked
-                                </label>
+                                <div class="checkbox">
+                                    <input id="checkbox2" type="checkbox" checked="">
+                                    <label for="checkbox2">
+                                        Checked
+                                    </label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="input-group form-group-no-border input-lg">
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox" checked="">
-                                    <span class="form-check-sign"></span>
-                                    Checked
-                                </label>
+                            <div class="input-group form-group-no-border input-lg">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" checked="">
+                                        <span class="form-check-sign"></span>
+                                        Checked
+                                    </label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="input-group form-group-no-border input-lg">
-                            <div class="form-check">
-                                @Html.CheckBoxFor(m => m.RememberMe)
-                                @Html.LabelFor(m => m.RememberMe)
-                            </div>
-                        </div>*@
+                            <div class="input-group form-group-no-border input-lg">
+                                <div class="form-check">
+                                    @Html.CheckBoxFor(m => m.RememberMe)
+                                    @Html.LabelFor(m => m.RememberMe)
+                                </div>
+                            </div>*@
 
                         <div class="footer text-center">
                             <button class="btn btn-primary btn-round btn-lg btn-block">Zaloguj</button>

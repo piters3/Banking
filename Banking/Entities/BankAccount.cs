@@ -6,6 +6,13 @@ namespace Banking.Entities
 {
     public class BankAccount
     {
+        public BankAccount(Guid accountNumber, double availableFunds)
+        {
+            AccountNumber = accountNumber;
+            Balance = availableFunds;
+            AvailableFunds = availableFunds;
+        }
+
         public BankAccount()
         {
             AccountNumber = Guid.NewGuid();

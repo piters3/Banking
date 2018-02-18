@@ -8,102 +8,105 @@
     <div class="card-header text-center">
         <h4 class="card-title">Nowa płatność</h4>
     </div>
-    <div class="row">
-        <div class="col-md-5 ml-auto mr-auto">
-            @using (Html.BeginForm("NewPayment", "UserPanel", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-                if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count > 0)
-                {
-                    <div class="alert alert-danger" role="alert">
-                        <div class="container">
-                            <strong>Niestety!</strong> @Html.ValidationSummary(true, "")
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">
-                                    <i class="now-ui-icons ui-1_simple-remove"></i>
-                                </span>
-                            </button>
-                        </div>
-                    </div>
-                }
-                <div class="card-body">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Amount)
-                        @Html.TextBoxFor(model => model.Amount, new { @class = "form-control", type = "number", min = "1", step = "100", @Value = "0" })
-                        @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.PaymentDate)
-                        @Html.TextBoxFor(model => model.PaymentDate, new { @class = "form-control date-picker", placeholder = "Wybierz datę" })
-                        @Html.ValidationMessageFor(model => model.PaymentDate, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.RecipentName)
-                        @Html.TextBoxFor(model => model.RecipentName, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.RecipentName, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.AccountNumber)
-                        @Html.TextBoxFor(model => model.AccountNumber, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.AccountNumber, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.RecipentAddress)
-                        @Html.TextBoxFor(model => model.RecipentAddress, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.RecipentAddress, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Title)
-                        @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-round pull-right">Send Message</button>
+    @using (Html.BeginForm("NewPayment", "UserPanel", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count > 0)
+        {
+            <div class="alert alert-danger" role="alert">
+                <div class="container">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">
+                            <i class="now-ui-icons ui-1_simple-remove"></i>
+                        </span>
+                    </button>
+                    <strong>Niestety!</strong> @Html.ValidationSummary(true, "")
                 </div>
-            }
-        </div>
-
-        <div class="col-md-5 ml-auto mr-auto">
-            @*<form role="form" id="contact-form" method="post">
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label>Email address</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="now-ui-icons ui-1_email-85"></i></span>
-                                </div>
-                                <input type="email" class="form-control" placeholder="Email Here...">
-                            </div>
+            </div>
+        }
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <span class="col-sm-4 col-form-label text-right">Z konta:</span>
+                        <span class="col-sm-8 text-left account-info">@ViewBag.AccountNumber</span>
+                        <span class="col-sm-4 col-form-label text-right">Dostepne środki:</span>
+                        <span class="col-sm-8 text-left account-info">@ViewBag.AvailableFunds PLN</span>
+                        @Html.LabelFor(model => model.Amount, new { @class = "col-sm-4 col-form-label text-right" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.Amount, new { @class = "form-control", type = "number", min = "1", @Value = "0" })
+                            @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
                         </div>
-                        <button type="submit" class="btn btn-primary btn-round pull-right">Send Message</button>
                     </div>
-                </form>*@
+                    <div class="form-group row">
+                        @Html.LabelFor(model => model.PaymentDate, new { @class = "col-sm-4 col-form-label text-right" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.PaymentDate, new { @class = "form-control date-picker", placeholder = "Wybierz datę" })
+                            @Html.ValidationMessageFor(model => model.PaymentDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card-body">
+                    <div class="form-group row">
+                        @Html.LabelFor(model => model.RecipentName, new { @class = "col-sm-4 col-form-label text-right" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.RecipentName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.RecipentName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        @Html.LabelFor(model => model.AccountNumber, new { @class = "col-sm-4 col-form-label text-right" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.AccountNumber, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.AccountNumber, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        @Html.LabelFor(model => model.RecipentAddress, new { @class = "col-sm-4 col-form-label text-right" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.RecipentAddress, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.RecipentAddress, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        @Html.LabelFor(model => model.Title, new { @class = "col-sm-4 col-form-label text-right" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-round pull-right">Wyślij</button>
+                </div>
+            </div>
         </div>
-    </div>
+    }
 </div>
 
 
 
 @section Scripts {
-    @*@Scripts.Render("~/Validate")*@
+    @Scripts.Render("~/Validate")
 
     <script type="text/javascript">
-        $('.date-picker').each(function () {
-            $(this).datepicker({
-                templates: {
-                    leftArrow: '<i class="now-ui-icons arrows-1_minimal-left"></i>',
-                    rightArrow: '<i class="now-ui-icons arrows-1_minimal-right"></i>'
-                }
-            }).on('show', function () {
-                $('.datepicker').addClass('open');
-
-                datepicker_color = $(this).data('datepicker-color');
-                if (datepicker_color.length != 0) {
-                    $('.datepicker').addClass('datepicker-' + datepicker_color + '');
-                }
-            }).on('hide', function () {
-                $('.datepicker').removeClass('open');
-            });
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+        $('.date-picker').datepicker({
+            onRender: function (date) {
+                return date.valueOf() < now.valueOf() ? 'disabled' : '';
+            },
+            templates: {
+                leftArrow: '<i class="now-ui-icons arrows-1_minimal-left"></i>',
+                rightArrow: '<i class="now-ui-icons arrows-1_minimal-right"></i>'
+            },
+            todayHighlight: true,
+            format: "dd.mm.yyyy",
+            startDate: now
+        }).on('show', function () {
+            $('.datepicker').addClass('open');
+        }).on('hide', function () {
+            $('.datepicker').removeClass('open');
         });
-
     </script>
 }

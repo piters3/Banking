@@ -88,10 +88,10 @@ $(document).ready(function() {
         }).on('show', function() {
             $('.datepicker').addClass('open');
 
-            datepicker_color = $(this).data('datepicker-color');
-            if (datepicker_color.length != 0) {
-                $('.datepicker').addClass('datepicker-' + datepicker_color + '');
-            }
+            //datepicker_color = $(this).data('datepicker-color');
+            //if (datepicker_color.length != 0) {
+            //    $('.datepicker').addClass('datepicker-' + datepicker_color + '');
+            //}
         }).on('hide', function() {
             $('.datepicker').removeClass('open');
         });

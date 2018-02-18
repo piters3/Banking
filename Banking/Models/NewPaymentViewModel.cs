@@ -23,6 +23,8 @@ namespace Banking.Models
 
         [Required]
         [Display(Name = "Data przelewu")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime PaymentDate { get; set; }
 
         [Required]
