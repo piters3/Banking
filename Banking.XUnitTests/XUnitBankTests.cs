@@ -4,41 +4,44 @@ using Banking.Infrastructure;
 using Banking.Models;
 using NSubstitute;
 using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using Xunit;
 
 namespace Banking.XUnitFacts
 {
-    public class XUnitBankFacts
+    public class XUnitBankTests
     {
         private IRepository _repository;
         private HomeController _homeController;
         private BankAccountsAdminController _bankController;
         private UserPanelController _userPanelController;
+        private PaymentsAdminController _paymentsAdminController;
         private PanelAdminController _panelAdminController;
 
 
-        public XUnitBankFacts()
+        public XUnitBankTests()
         {
             _repository = Substitute.For<IRepository>();
             _homeController = new HomeController();
             _bankController = new BankAccountsAdminController(_repository);
             _userPanelController = new UserPanelController(_repository);
+            _paymentsAdminController = new PaymentsAdminController(_repository);
             _panelAdminController = new PanelAdminController();
         }
 
 
         [Fact]
-        public void BankAccountsAdmin_Details_Returns_BankAccountViewModel()
+        public void BankAccountsAdmin_Details_Returns_HttpStatusCode_BadRequest_On_Null_Id()
         {
-            var bankAccountToDisplay = new BankAccount(Guid.NewGuid(), 1000);
-            _repository.GetBankAccount(Arg.Any<Guid>()).Returns(bankAccountToDisplay);
+            _repository.GetBankAccount(Arg.Any<Guid>()).Returns((BankAccount)null);
 
-            var viewResult = _bankController.Details(bankAccountToDisplay.AccountNumber) as ViewResult;
-            var model = viewResult.Model as BankAccountViewModel;
+            var httpStatusCodeResult = _bankController.Details(null) as HttpStatusCodeResult;
 
-            Assert.Equal(1000, model.Balance);
-            Assert.True(model.Balance.Equals(1000));
+            Assert.Equal(400, httpStatusCodeResult.StatusCode);
         }
 
 
@@ -54,6 +57,7 @@ namespace Banking.XUnitFacts
         [Fact]
         public void UserPanel_NewPayment_Throw_Exception_If_Not_Enough_Money()
         {
+            //FakeLoggedInUser();
             var senderBankAccount = new BankAccount(Guid.NewGuid(), 1000);
             var recipientBankAccount = new BankAccount(Guid.NewGuid(), 1000);
             var paymentModel = new NewPaymentViewModel() { Amount = 2000 };
@@ -63,7 +67,7 @@ namespace Banking.XUnitFacts
             Assert.Throws<ArgumentOutOfRangeException>(() => _userPanelController.NewPayment(paymentModel));
             var exception = Record.Exception(() => _userPanelController.NewPayment(paymentModel));
             Assert.IsType<ArgumentOutOfRangeException>(exception);
-            Assert.IsAssignableFrom<ArgumentOutOfRangeException>(exception);      
+            Assert.IsAssignableFrom<ArgumentOutOfRangeException>(exception);
         }
 
 
@@ -73,6 +77,7 @@ namespace Banking.XUnitFacts
         [InlineData(3000)]
         public void UserPanel_NewPayment_Changes_Bank_Accounts_Balance(int amount)
         {
+            //FakeLoggedInUser();
             int senderInitialBalance = 10000;
             int recipientInitialBalance = 9999;
             var senderBankAccount = new BankAccount(Guid.NewGuid(), senderInitialBalance);
@@ -122,5 +127,37 @@ namespace Banking.XUnitFacts
 
             Assert.Contains("Konto bankowe", _bankController.TempData["message"].ToString());
         }
+
+
+        [Fact]
+        public async Task PaymentsAdmin_Details_Async()
+        {
+            var paymentToDisplay = new Payment() { Id = 1, Amount = 100, Title = "Tytuł przelewu" };
+            _repository.GetPaymentAsync(Arg.Any<int>()).Returns((paymentToDisplay));
+
+            var viewResult = await _paymentsAdminController.Details(paymentToDisplay.Id) as ViewResult;
+            var model = viewResult.Model as Payment;
+
+            Assert.Equal(100, model.Amount);
+            Assert.NotNull(viewResult);
+        }
+
+
+        //private void FakeLoggedInUser()
+        //{
+        //    var validPrincipal = new ClaimsPrincipal(
+        //        new[]
+        //        {
+        //            new ClaimsIdentity(
+        //            new[] {new Claim(ClaimTypes.NameIdentifier, "FakeUserId")})
+        //        });
+
+        //    var context = Substitute.For<HttpContextBase>();
+        //    var request = Substitute.For<HttpRequestBase>();
+        //    context.User.Returns(validPrincipal);
+        //    context.Request.Returns(request);
+
+        //    _userPanelController.ControllerContext = new ControllerContext(context, new RouteData(), _userPanelController);
+        //}
     }
 }

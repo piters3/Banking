@@ -118,13 +118,19 @@ namespace Banking.Controllers
         }
 
 
-        public ActionResult Details(Guid id)
+        public ActionResult Details(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             BankAccount ba = _repo.GetBankAccount(id);
+
+            if (ba == null)
+            {
+                return HttpNotFound();
+            }
+
             BankAccountViewModel model = new BankAccountViewModel()
             {
                 AvailableFunds = ba.AvailableFunds,
@@ -137,17 +143,13 @@ namespace Banking.Controllers
                 User = ba.User
             };
 
-            if (ba == null)
-            {
-                return HttpNotFound();
-            }
             return View(model);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(Guid id)
+        public ActionResult Delete(Guid? id)
         {
             if (id == null)
             {

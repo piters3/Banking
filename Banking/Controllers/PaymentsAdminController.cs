@@ -3,6 +3,8 @@ using Banking.Infrastructure;
 using Banking.Models;
 using System;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace Banking.Controllers
@@ -167,6 +169,23 @@ namespace Banking.Controllers
             ViewBag.BankAccountsList = new SelectList(_repo.GetBankAccounts(), "AccountNumber", "User.UserName");
             ModelState.AddModelError("", "Błąd");
             return View(model);
+        }
+
+
+        public async Task<ActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Payment payment = await _repo.GetPaymentAsync(id);
+
+            if (payment == null)
+            {
+                return HttpNotFound();
+            }
+            return View(payment);
         }
 
 

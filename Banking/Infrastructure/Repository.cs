@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Banking.Infrastructure
 {
@@ -21,6 +22,10 @@ namespace Banking.Infrastructure
             _ctx.SaveChanges();
         }
 
+        public async Task SaveAsync()
+        {
+            await _ctx.SaveChangesAsync();
+        }
 
         public IEnumerable<User> GetUsers()
         {
@@ -52,7 +57,7 @@ namespace Banking.Infrastructure
             return _ctx.BankAccounts.ToList();
         }
 
-        public BankAccount GetBankAccount(Guid accountNumber)
+        public BankAccount GetBankAccount(Guid? accountNumber)
         {
             return _ctx.BankAccounts.Find(accountNumber);
         }
@@ -78,9 +83,15 @@ namespace Banking.Infrastructure
             return _ctx.Payments.ToList();
         }
 
+
         public Payment GetPayment(int id)
         {
             return _ctx.Payments.Find(id);
+        }
+
+        public async Task<Payment> GetPaymentAsync(int? id)
+        {
+            return await _ctx.Payments.FindAsync(id);
         }
 
         public void Insert(Payment payment)
@@ -101,7 +112,7 @@ namespace Banking.Infrastructure
 
         public IEnumerable<Payment> GetUserPayments(string id)
         {
-            return _ctx.Payments.Where(p => p.From.UserId == id).ToList().OrderByDescending(p=>p.Id);
+            return _ctx.Payments.Where(p => p.From.UserId == id).ToList().OrderByDescending(p => p.Id);
         }
 
 
