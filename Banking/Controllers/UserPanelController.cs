@@ -124,7 +124,7 @@ namespace Banking.Controllers
                     throw new ArgumentOutOfRangeException("Za mało hasju");
                 }
             }
-            ModelState.AddModelError("", "Błąd");
+            ModelState.AddModelError("", "Popraw błędy formularza");
             ViewBag.AccountNumber = from.AccountNumber.ToString().ToUpper();
             ViewBag.AvailableFunds = from.AvailableFunds;
             return View(model);

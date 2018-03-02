@@ -4,6 +4,7 @@ using Banking.Infrastructure;
 using Banking.Models;
 using NSubstitute;
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -11,7 +12,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Xunit;
 
-namespace Banking.XUnitFacts
+namespace Banking.XUnitTests
 {
     public class XUnitBankTests
     {
@@ -20,7 +21,6 @@ namespace Banking.XUnitFacts
         private BankAccountsAdminController _bankController;
         private UserPanelController _userPanelController;
         private PaymentsAdminController _paymentsAdminController;
-        private PanelAdminController _panelAdminController;
 
 
         public XUnitBankTests()
@@ -30,7 +30,6 @@ namespace Banking.XUnitFacts
             _bankController = new BankAccountsAdminController(_repository);
             _userPanelController = new UserPanelController(_repository);
             _paymentsAdminController = new PaymentsAdminController(_repository);
-            _panelAdminController = new PanelAdminController();
         }
 
 
@@ -57,7 +56,6 @@ namespace Banking.XUnitFacts
         [Fact]
         public void UserPanel_NewPayment_Throw_Exception_If_Not_Enough_Money()
         {
-            //FakeLoggedInUser();
             var senderBankAccount = new BankAccount(Guid.NewGuid(), 1000);
             var recipientBankAccount = new BankAccount(Guid.NewGuid(), 1000);
             var paymentModel = new NewPaymentViewModel() { Amount = 2000 };
@@ -77,7 +75,6 @@ namespace Banking.XUnitFacts
         [InlineData(3000)]
         public void UserPanel_NewPayment_Changes_Bank_Accounts_Balance(int amount)
         {
-            //FakeLoggedInUser();
             int senderInitialBalance = 10000;
             int recipientInitialBalance = 9999;
             var senderBankAccount = new BankAccount(Guid.NewGuid(), senderInitialBalance);
@@ -94,24 +91,24 @@ namespace Banking.XUnitFacts
 
 
         [Fact]
-        public void PanelAdmin_Index_Returns_Instance_Of_View_Result()
+        public void Home_Index_Returns_Instance_Of_View_Result()
         {
-            var viewResult = _panelAdminController.Index() as ViewResult;
+            var viewResult = _homeController.Index() as ViewResult;
 
             Assert.IsType<ViewResult>(viewResult);
             Assert.IsAssignableFrom<ViewResult>(viewResult);
         }
 
 
-        [Fact(Skip = "Pomijam")]
-        public void Ignore()
-        {
-            int a = 2, b = 3, correctResult = 5;
+        //[Fact(Skip = "Pomijam")]
+        //public void Ignore()
+        //{
+        //    int a = 2, b = 3, correctResult = 5;
 
-            int result = a + b;
+        //    int result = a + b;
 
-            Assert.Equal(result, correctResult);
-        }
+        //    Assert.Equal(result, correctResult);
+        //}
 
 
         [Fact]
@@ -140,6 +137,21 @@ namespace Banking.XUnitFacts
 
             Assert.Equal(100, model.Amount);
             Assert.NotNull(viewResult);
+        }
+
+
+        [Fact]
+        public void All_Bank_Account_In_List_Are_Not_Null()
+        {
+            List<BankAccount> bankList = new List<BankAccount>();
+
+            for (int i = 0; i < 100000; i++)
+            {
+                BankAccount ba = new BankAccount(Guid.NewGuid(), 1000);
+                bankList.Add(ba);
+            }
+
+            Assert.DoesNotContain(null, bankList);
         }
 
 

@@ -3,7 +3,7 @@ using Xunit;
 
 //[assembly: CollectionBehavior(MaxParallelThreads = 4)]
 
-namespace Banking.NUnitFacts
+namespace Banking.XUnitTests
 {
     public class XUnitParalellTests1
     {

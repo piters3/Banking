@@ -5,6 +5,7 @@ using Banking.Models;
 using NSubstitute;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -21,7 +22,6 @@ namespace Banking.NUnitTests
         private BankAccountsAdminController _bankController;
         private UserPanelController _userPanelController;
         private PaymentsAdminController _paymentsAdminController;
-        private PanelAdminController _panelAdminController;
 
 
         [SetUp]
@@ -32,7 +32,6 @@ namespace Banking.NUnitTests
             _bankController = new BankAccountsAdminController(_repository);
             _userPanelController = new UserPanelController(_repository);
             _paymentsAdminController = new PaymentsAdminController(_repository);
-            _panelAdminController = new PanelAdminController();
         }
 
 
@@ -61,7 +60,6 @@ namespace Banking.NUnitTests
         [Test]
         public void UserPanel_NewPayment_Throw_Exception_If_Not_Enough_Money()
         {
-            //FakeLoggedInUser();
             var senderBankAccount = new BankAccount(Guid.NewGuid(), 1000);
             var recipientBankAccount = new BankAccount(Guid.NewGuid(), 1000);
             var paymentModel = new NewPaymentViewModel() { Amount = 2000 };
@@ -77,7 +75,6 @@ namespace Banking.NUnitTests
         [TestCase(3000)]
         public void UserPanel_NewPayment_Changes_Bank_Accounts_Balance(int amount)
         {
-            //FakeLoggedInUser();
             int senderInitialBalance = 10000;
             int recipientInitialBalance = 9999;
             var senderBankAccount = new BankAccount(Guid.NewGuid(), senderInitialBalance);
@@ -97,9 +94,9 @@ namespace Banking.NUnitTests
 
 
         [Test]
-        public void PanelAdmin_Index_Returns_Instance_Of_View_Result()
+        public void Home_Index_Returns_Instance_Of_View_Result()
         {
-            var viewResult = _panelAdminController.Index() as ViewResult;
+            var viewResult = _homeController.Index() as ViewResult;
 
             Assert.That(viewResult, Is.InstanceOf<ViewResult>());
             Assert.That(viewResult, Is.InstanceOf(typeof(ViewResult)));
@@ -110,16 +107,16 @@ namespace Banking.NUnitTests
         }
 
 
-        [Test]
-        [Ignore("Pomijam")]
-        public void Ignore()
-        {
-            int a = 2, b = 3, correctResult = 5;
+        //[Test]
+        //[Ignore("Pomijam")]
+        //public void Ignore()
+        //{
+        //    int a = 2, b = 3, correctResult = 5;
 
-            int result = a + b;
+        //    int result = a + b;
 
-            Assert.AreEqual(result, correctResult);
-        }
+        //    Assert.AreEqual(result, correctResult);
+        //}
 
 
         [Test]
@@ -150,6 +147,21 @@ namespace Banking.NUnitTests
 
             Assert.AreEqual(100, model.Amount);
             Assert.IsNotNull(viewResult);
+        }
+
+
+        [Test]
+        public void All_Bank_Account_In_List_Are_Not_Null()
+        {
+            List<BankAccount> bankList = new List<BankAccount>();
+
+            for (int i = 0; i < 100000; i++)
+            {
+                BankAccount ba = new BankAccount(Guid.NewGuid(), 1000);
+                bankList.Add(ba);
+            }
+
+            CollectionAssert.AllItemsAreNotNull(bankList);
         }
 
 
