@@ -66,7 +66,9 @@ namespace Banking.NUnitTests
             _repository.GetBankAccount(Arg.Any<Guid>()).Returns(senderBankAccount);
             _repository.GetUserBankAccount(Arg.Any<string>()).Returns(recipientBankAccount);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => _userPanelController.NewPayment(paymentModel));
+            Assert.Throws<ArgumentOutOfRangeException>(() => _userPanelController.NewPayment(paymentModel)); 
+            Assert.Catch<ArgumentOutOfRangeException>(()=> _userPanelController.NewPayment(paymentModel));
+            Assert.That(() => _userPanelController.NewPayment(paymentModel), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
 
@@ -89,7 +91,6 @@ namespace Banking.NUnitTests
             Assert.That(recipientBankAccount.Balance, Is.EqualTo(recipientInitialBalance + amount));
             Assert.AreEqual(senderBankAccount.Balance, senderInitialBalance - amount);
             Assert.That(senderBankAccount.Balance, Is.EqualTo(senderInitialBalance - amount));
-
         }
 
 
@@ -137,7 +138,7 @@ namespace Banking.NUnitTests
 
 
         [Test]
-        public async Task PaymentsAdmin_Details_Async()
+        public async Task PaymentsAdmin_Details_Returns_Payment_For_Given_Id_Async()
         {
             var paymentToDisplay = new Payment() { Id = 1, Amount = 100, Title = "Tytuł przelewu" };
             _repository.GetPaymentAsync(Arg.Any<int>()).Returns((paymentToDisplay));
@@ -150,19 +151,19 @@ namespace Banking.NUnitTests
         }
 
 
-        [Test]
-        public void All_Bank_Account_In_List_Are_Not_Null()
-        {
-            List<BankAccount> bankList = new List<BankAccount>();
+        //[Test]
+        //public void All_Bank_Account_In_List_Are_Not_Null()
+        //{
+        //    List<BankAccount> bankList = new List<BankAccount>();
 
-            for (int i = 0; i < 100000; i++)
-            {
-                BankAccount ba = new BankAccount(Guid.NewGuid(), 1000);
-                bankList.Add(ba);
-            }
+        //    for (int i = 0; i < 100000; i++)
+        //    {
+        //        BankAccount ba = new BankAccount(Guid.NewGuid(), 1000);
+        //        bankList.Add(ba);
+        //    }
 
-            CollectionAssert.AllItemsAreNotNull(bankList);
-        }
+        //    CollectionAssert.AllItemsAreNotNull(bankList);
+        //}
 
 
         //private void FakeLoggedInUser()

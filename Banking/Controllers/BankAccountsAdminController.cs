@@ -66,7 +66,7 @@ namespace Banking.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.UsersList = new SelectList(_repo.GetUsers(), "Id", "UserName", model.UserId);
-            ModelState.AddModelError("", "Błąd");
+            ModelState.AddModelError("", "Popraw błędy formularza");
             return View(model);
         }
 

@@ -127,7 +127,7 @@ namespace Banking.MSTests
 
 
         [TestMethod]
-        public async Task PaymentsAdmin_Details_Async()
+        public async Task PaymentsAdmin_Details_Returns_Payment_For_Given_Id_Async()
         {
             var paymentToDisplay = new Payment() { Id = 1, Amount = 100, Title = "Tytuł przelewu" };
             _repository.GetPaymentAsync(Arg.Any<int>()).Returns((paymentToDisplay));
@@ -140,19 +140,19 @@ namespace Banking.MSTests
         }
 
 
-        [TestMethod]
-        public void All_Bank_Account_In_List_Are_Not_Null()
-        {
-            List<BankAccount> bankList = new List<BankAccount>();
+        //[TestMethod]
+        //public void All_Bank_Account_In_List_Are_Not_Null()
+        //{
+        //    List<BankAccount> bankList = new List<BankAccount>();
 
-            for (int i = 0; i < 100000; i++)
-            {
-                BankAccount ba = new BankAccount(Guid.NewGuid(), 1000);
-                bankList.Add(ba);
-            }         
+        //    for (int i = 0; i < 100000; i++)
+        //    {
+        //        BankAccount ba = new BankAccount(Guid.NewGuid(), 1000);
+        //        bankList.Add(ba);
+        //    }         
 
-            CollectionAssert.AllItemsAreNotNull(bankList);
-        }
+        //    CollectionAssert.AllItemsAreNotNull(bankList);
+        //}
 
 
         //private void FakeLoggedInUser()
