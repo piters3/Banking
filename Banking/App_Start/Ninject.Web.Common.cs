@@ -1,13 +1,10 @@
-using Banking.App_Start;
-
-[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
-[assembly: WebActivatorEx.ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(Banking.App_Start.NinjectWebCommon), "Start")]
+[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(Banking.App_Start.NinjectWebCommon), "Stop")]
 
 namespace Banking.App_Start
 {
     using System;
     using System.Web;
-    using Banking.Entities;
     using Banking.Infrastructure;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
@@ -48,7 +45,6 @@ namespace Banking.App_Start
             {
                 kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
                 kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-
                 RegisterServices(kernel);
                 return kernel;
             }
